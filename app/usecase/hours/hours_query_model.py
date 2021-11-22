@@ -26,5 +26,5 @@ class HoursReadModel(BaseModel):
 
 
 class PaginatedHoursReadModel(BaseModel):
-    hourss: List[HoursReadModel] = Field(example=HoursReadModel.schema())
+    hours: List[HoursReadModel] = Field(example=HoursReadModel.schema())
     count: int = Field(ge=0, example=1)
