@@ -116,7 +116,11 @@ async def get_hours(
 ):
     try:
         hours, count = hours_query_usecase.fetch_hours(limit=limit, offset=offset)
-
+    except HoursNotFoundError as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         logger.error(e)
         raise HTTPException(
