@@ -16,7 +16,7 @@ from app.domain.hours import (
     HoursRepository,
     HoursNotFoundError,
 )
-from app.domain.hours.hours_exception import CategoriesNotFoundError
+
 from app.infrastructure.hours import (
     HoursCommandUseCaseUnitOfWorkImpl,
     HoursQueryServiceImpl,

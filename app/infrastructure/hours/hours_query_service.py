@@ -58,7 +58,7 @@ class HoursQueryServiceImpl(HoursQueryService):
                 hours_q = hours_q.filter_by(day=day)
             if user_id:
                 hours_q = hours_q.filter_by(user_id=user_id)
-            if minutes
+            if minutes:
                 hours_q = hours_q.filter_by(minutes=minutes)
 
             hours_dtos = hours_q.slice(limit * offset, limit * (offset + 1)).all()
