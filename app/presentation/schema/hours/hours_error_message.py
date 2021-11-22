@@ -5,7 +5,7 @@ from app.domain.hours import (
     HoursNotFoundError,
     HoursNotFoundError,
 )
-from app.domain.hours.hours_exception import CategoriesNotFoundError
+
 
 
 class ErrorMessageHoursNotFound(BaseModel):
@@ -18,7 +18,3 @@ class ErrorMessageHoursDayAlreadyExists(BaseModel):
 
 class ErrorMessageHoursNotFound(BaseModel):
     detail: str = Field(example=HoursNotFoundError.message)
-
-
-class ErrorMessageCategoriesNotFound(BaseModel):
-    detail: str = Field(example=CategoriesNotFoundError.message)

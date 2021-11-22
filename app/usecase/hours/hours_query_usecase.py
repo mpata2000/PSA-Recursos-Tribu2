@@ -18,9 +18,6 @@ class HoursQueryUseCase(ABC):
     ) -> Tuple[List[HoursReadModel], int]:
         raise NotImplementedError
 
-    @abstractmethod
-    def fetch_categories(self):
-        raise NotImplementedError
 
     @abstractmethod
     def fetch_hours_by_filters(
