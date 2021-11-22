@@ -24,3 +24,7 @@ class HoursRepository(ABC):
     @abstractmethod
     def delete_by_id(self, id: str):
         raise NotImplementedError
+
+    @abstractmethod
+    def find_existing_hours(self, day, user_id):
+        raise NotImplementedError
