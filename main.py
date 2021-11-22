@@ -1,45 +1,49 @@
+import ast
+import json
 import logging
+import os
 from logging import config
-from typing import Iterator, List
+from typing import Iterator, List, Optional
 
-from fastapi import Depends, FastAPI, HTTPException, status
+import requests
+from fastapi import Depends, FastAPI, HTTPException, Query, status
 from sqlalchemy.orm.session import Session
+from starlette.requests import Request
 
-from app.domain.course import (
-    CourseNameAlreadyExistsError,
-    CourseNotFoundError,
-    CourseRepository,
-    CoursesNotFoundError,
+from app.domain.hours import (
+    HoursDayAlreadyExistsError,
+    HoursNotFoundError,
+    HoursRepository,
+    HoursNotFoundError,
 )
-from app.infrastructure.sqlite.course import (
-    CourseCommandUseCaseUnitOfWorkImpl,
-    CourseQueryServiceImpl,
-    CourseRepositoryImpl,
+
+from app.infrastructure.hours import (
+    HoursCommandUseCaseUnitOfWorkImpl,
+    HoursQueryServiceImpl,
+    HoursRepositoryImpl,
 )
-from app.infrastructure.sqlite.database import SessionLocal, create_tables
-from app.presentation.schema.course.course_error_message import (
-    ErrorMessageCourseNameAlreadyExists,
-    ErrorMessageCourseNotFound,
-    ErrorMessageCoursesNotFound,
+from app.infrastructure.database import SessionLocal, create_tables
+from app.presentation.schema.hours.hours_error_message import (
+    ErrorMessageHoursDayAlreadyExists,
+    ErrorMessageHoursNotFound,
 )
-from app.usecase.course import (
-    CourseCommandUseCase,
-    CourseCommandUseCaseImpl,
-    CourseCommandUseCaseUnitOfWork,
-    CourseCreateModel,
-    CourseQueryService,
-    CourseQueryUseCase,
-    CourseQueryUseCaseImpl,
-    CourseReadModel,
-    CourseUpdateModel,
+from app.usecase.hours import (
+    HoursCommandUseCase,
+    HoursCommandUseCaseImpl,
+    HoursCommandUseCaseUnitOfWork,
+    HoursCreateModel,
+    HoursQueryService,
+    HoursQueryUseCase,
+    HoursQueryUseCaseImpl,
+    HoursReadModel,
+    HoursUpdateModel,
 )
+from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
 
 config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(
-    title="courses"
-)
+app = FastAPI(title="hours")
 
 create_tables()
 
@@ -52,39 +56,40 @@ def get_session() -> Iterator[Session]:
         session.close()
 
 
-def course_query_usecase(session: Session = Depends(get_session)) -> CourseQueryUseCase:
-    course_query_service: CourseQueryService = CourseQueryServiceImpl(session)
-    return CourseQueryUseCaseImpl(course_query_service)
+def hours_query_usecase(session: Session = Depends(get_session)) -> HoursQueryUseCase:
+    hours_query_service: HoursQueryService = HoursQueryServiceImpl(session)
+    return HoursQueryUseCaseImpl(hours_query_service)
 
 
-def course_command_usecase(
+def hours_command_usecase(
     session: Session = Depends(get_session),
-) -> CourseCommandUseCase:
-    course_repository: CourseRepository = CourseRepositoryImpl(session)
-    uow: CourseCommandUseCaseUnitOfWork = CourseCommandUseCaseUnitOfWorkImpl(
-        session, course_repository=course_repository
+) -> HoursCommandUseCase:
+    hours_repository: HoursRepository = HoursRepositoryImpl(session)
+    uow: HoursCommandUseCaseUnitOfWork = HoursCommandUseCaseUnitOfWorkImpl(
+        session, hours_repository=hours_repository
     )
-    return CourseCommandUseCaseImpl(uow)
+    return HoursCommandUseCaseImpl(uow)
 
 
 @app.post(
-    "/courses",
-    response_model=CourseReadModel,
+    "/hours",
+    response_model=HoursReadModel,
     status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_409_CONFLICT: {
-            "model": ErrorMessageCourseNameAlreadyExists,
+            "model": ErrorMessageHoursDayAlreadyExists,
         },
     },
-    tags=["courses"],
+    tags=["hours"],
 )
-async def create_course(
-    data: CourseCreateModel,
-    course_command_usecase: CourseCommandUseCase = Depends(course_command_usecase),
+async def create_hours(
+    user_id: str,
+    data: HoursCreateModel,
+    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
-        course = course_command_usecase.create_course(data)
-    except CourseNameAlreadyExistsError as e:
+        hours = hours_command_usecase.create_hours(data, user_id)
+    except HoursDayAlreadyExistsError as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail=e.message,
@@ -95,25 +100,64 @@ async def create_course(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    return course
+    return hours
 
 
 @app.get(
-    "/courses",
-    response_model=List[CourseReadModel],
+    "/hours",
+    response_model=PaginatedHoursReadModel,
     status_code=status.HTTP_200_OK,
-    responses={
-        status.HTTP_404_NOT_FOUND: {
-            "model": ErrorMessageCoursesNotFound,
-        },
-    },
-    tags=["courses"],
+    tags=["hours"],
 )
-async def get_courses(
-    course_query_usecase: CourseQueryUseCase = Depends(course_query_usecase),
+async def get_hours(
+    limit: int = 50,
+    offset: int = 0,
+    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
-        courses = course_query_usecase.fetch_courses()
+        hours, count = hours_query_usecase.fetch_hours(limit=limit, offset=offset)
+    except HoursNotFoundError as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+    if len(hours) == 0:
+        logger.info(HoursNotFoundError.message)
+
+    return PaginatedHoursReadModel(hours=hours, count=count)
+
+
+@app.get(
+    "/hours/",
+    response_model=PaginatedHoursReadModel,
+    status_code=status.HTTP_200_OK,
+    tags=["hours"],
+)
+async def get_hours_filtering(
+    ids: Optional[List[str]] = Query(None),
+    day: Optional[str] = None,
+    user_id: Optional[str] = None,
+    time: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
+):
+
+    try:
+        hours, count = hours_query_usecase.fetch_hours_by_filters(
+            ids=ids,
+            day=day,
+            user_id=user_id,
+            time=time,
+            limit=limit,
+            offset=offset,
+        )
 
     except Exception as e:
         logger.error(e)
@@ -121,33 +165,31 @@ async def get_courses(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    if len(courses) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=CoursesNotFoundError.message,
-        )
+    if hours is None or len(hours) == 0:
+        logger.info(HoursNotFoundError.message)
 
-    return courses
+    return PaginatedHoursReadModel(hours=hours, count=count)
 
 
 @app.get(
-    "/courses/{course_id}",
-    response_model=CourseReadModel,
+    "/hours/{id}",
+    response_model=HoursReadModel,
     status_code=status.HTTP_200_OK,
     responses={
         status.HTTP_404_NOT_FOUND: {
-            "model": ErrorMessageCourseNotFound,
+            "model": ErrorMessageHoursNotFound,
         },
     },
-    tags=["courses"],
+    tags=["hours"],
 )
-async def get_course(
-    course_id: str,
-    course_query_usecase: CourseQueryUseCase = Depends(course_query_usecase),
+async def get_hours(
+    id: str,
+    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
-        course = course_query_usecase.fetch_course_by_id(course_id)
-    except CourseNotFoundError as e:
+        hours = hours_query_usecase.fetch_hours_by_id(id)
+
+    except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,
@@ -158,28 +200,29 @@ async def get_course(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    return course
+    return hours
 
 
-@app.put(
-    "/courses/{course_id}",
-    response_model=CourseReadModel,
+@app.patch(
+    "/hours/{id}",
+    response_model=HoursReadModel,
     status_code=status.HTTP_202_ACCEPTED,
     responses={
         status.HTTP_404_NOT_FOUND: {
-            "model": ErrorMessageCourseNotFound,
+            "model": ErrorMessageHoursNotFound,
         },
     },
-    tags=["courses"],
+    tags=["hours"],
 )
-async def update_course(
-    course_id: str,
-    data: CourseUpdateModel,
-    course_command_usecase: CourseCommandUseCase = Depends(course_command_usecase),
+async def update_hours(
+    id: str,
+    data: HoursUpdateModel,
+    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
+    query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
-        updated_course = course_command_usecase.update_course(course_id, data)
-    except CourseNotFoundError as e:
+        updated_hours = hours_command_usecase.update_hours(id, data)
+    except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,
@@ -190,26 +233,27 @@ async def update_course(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    return updated_course
+    return updated_hours
 
 
 @app.delete(
-    "/courses/{course_id}",
+    "/hours/{id}",
     status_code=status.HTTP_202_ACCEPTED,
     responses={
         status.HTTP_404_NOT_FOUND: {
-            "model": ErrorMessageCourseNotFound,
+            "model": ErrorMessageHoursNotFound,
         },
     },
-    tags=["courses"],
+    tags=["hours"],
 )
-async def delete_course(
-    course_id: str,
-    course_command_usecase: CourseCommandUseCase = Depends(course_command_usecase),
+async def delete_hours(
+    id: str,
+    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
+    query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
-        course_command_usecase.delete_course_by_id(course_id)
-    except CourseNotFoundError as e:
+        hours_command_usecase.delete_hours_by_id(id)
+    except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,
