@@ -31,9 +31,6 @@ class HoursQueryUseCase(ABC):
     ) -> Tuple[List[HoursReadModel], int]:
         raise NotImplementedError
 
-    @abstractmethod
-    def user_is_creator(self, hours_id: str, user_id: str) -> bool:
-        raise NotImplementedError
 
 
 class HoursQueryUseCaseImpl(HoursQueryUseCase):

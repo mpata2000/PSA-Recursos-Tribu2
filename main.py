@@ -250,7 +250,6 @@ async def delete_hours(
     query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
-        check_user_creator_permission(cid=id, uid=uid, query=query_usecase)  # type: ignore
         hours_command_usecase.delete_hours_by_id(id)
     except HoursNotFoundError as e:
         raise HTTPException(
