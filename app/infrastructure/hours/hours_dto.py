@@ -43,9 +43,6 @@ class HoursDTO(Base):
 
     @staticmethod
     def from_entity(hours: Hours) -> "HoursDTO":
-        now = unixtimestamp()
-        if hours.created_at is None:
-            hours.created_at = now
         return HoursDTO(
             id=hours.id,
             user_id=hours.user_id,
