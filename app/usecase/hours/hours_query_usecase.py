@@ -23,15 +23,9 @@ class HoursQueryUseCase(ABC):
     def fetch_hours_by_filters(
         self,
         ids: Optional[List[str]],
-        name: Optional[str],
-        creator_id: Optional[str],
-        colab_id: Optional[str],
-        inactive: Optional[bool],
-        category: Optional[str],
-        language: Optional[str],
-        ignore_free: Optional[bool],
-        ignore_paid: Optional[bool],
-        text: Optional[str],
+        day: Optional[str],
+        user_id: Optional[str],
+        time: Optional[int],
         limit: int = 100,
         offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
