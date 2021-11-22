@@ -29,7 +29,6 @@ class HoursQueryServiceImpl(HoursQueryService):
         try:
             hours_dtos = (
                 self.session.query(HoursDTO)
-                .order_by(HoursDTO.updated_at)
                 .slice(limit * offset, limit * (offset + 1))
                 .all()
             )

@@ -216,7 +216,6 @@ async def get_hours(
 )
 async def update_hours(
     id: str,
-    uid: str,
     data: HoursUpdateModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
     query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
@@ -249,7 +248,6 @@ async def update_hours(
 )
 async def delete_hours(
     id: str,
-    uid: str,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
     query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
