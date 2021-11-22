@@ -1,0 +1,10 @@
+/.coverage
+/coverage.xml
+/.cache/v/cache/lastfailed
+/pytest-coverage.txt
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/ubademy.service.pytemplate.iml
+/.idea/vcs.xml
