@@ -51,7 +51,6 @@ create_tables()
 
 
 def get_session() -> Iterator[Session]:
-    #from app.infrastructure.database import SessionLocal # TODO: Ver si se puede volver poner afuera de get_sesion()
     session: Session = SessionLocal()
     try:
         yield session

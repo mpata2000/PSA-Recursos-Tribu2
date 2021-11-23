@@ -1,5 +1,5 @@
 # ubademy.service.pytemplate
-[![codecov](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2/branch/main/graph/badge.svg?token=T726IGKKWO)](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2) [![Tests](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml) [![Linters](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/linters.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/linters.yml) [![Deploy](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml)
+[![codecov](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2/branch/main/graph/badge.svg?token=T726IGKKWO)](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2) [![Tests](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml) [![Deploy](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml)
 
 This is a template repository for a REST api on python.
 
