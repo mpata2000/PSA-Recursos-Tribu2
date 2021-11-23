@@ -16,13 +16,15 @@ from app.domain.hours import (
     HoursRepository,
     HoursNotFoundError,
 )
+from app.infrastructure.database import SessionLocal, create_tables
 
 from app.infrastructure.hours import (
     HoursCommandUseCaseUnitOfWorkImpl,
     HoursQueryServiceImpl,
     HoursRepositoryImpl,
 )
-from app.infrastructure.database import (SessionLocal, create_tables)
+
+
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
     ErrorMessageHoursNotFound,

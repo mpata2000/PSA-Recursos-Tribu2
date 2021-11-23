@@ -1,7 +1,6 @@
 fastapi
 uvicorn
 gunicorn
-uvloop
 httptools
 requests
 sqlalchemy
