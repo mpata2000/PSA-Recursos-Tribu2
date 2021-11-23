@@ -16,7 +16,7 @@ from app.domain.hours import (
     HoursRepository,
     HoursNotFoundError,
 )
-from app.infrastructure.database import SessionLocal, create_tables
+from app.infrastructure.database import create_tables
 
 from app.infrastructure.hours import (
     HoursCommandUseCaseUnitOfWorkImpl,
@@ -51,6 +51,7 @@ create_tables()
 
 
 def get_session() -> Iterator[Session]:
+    from app.infrastructure.database import SessionLocal
     session: Session = SessionLocal()
     try:
         yield session
