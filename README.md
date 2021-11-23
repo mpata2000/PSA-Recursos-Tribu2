@@ -1,5 +1,5 @@
 # ubademy.service.pytemplate
-[![codecov](https://codecov.io/gh/Ubademy/ubademy.service.courses/branch/master/graph/badge.svg?token=T726IGKKWO)](https://codecov.io/gh/Ubademy/ubademy.service.courses) [![Tests](https://github.com/Ubademy/ubademy.service.courses/actions/workflows/test.yml/badge.svg)](https://github.com/Ubademy/ubademy.service.courses/actions/workflows/test.yml) [![Linters](https://github.com/Ubademy/ubademy.service.courses/actions/workflows/linters.yml/badge.svg)](https://github.com/Ubademy/ubademy.service.courses/actions/workflows/linters.yml) [![Deploy](https://github.com/Ubademy/ubademy.service.courses/actions/workflows/deploy.yml/badge.svg)](https://github.com/Ubademy/ubademy.service.courses/actions/workflows/deploy.yml)
+[![codecov](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2/branch/main/graph/badge.svg?token=T726IGKKWO)](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2) [![Tests](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml) [![Linters](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/linters.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/linters.yml) [![Deploy](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml)
 
 This is a template repository for a REST api on python.
 
@@ -19,28 +19,28 @@ Directory structure (based on [Onion Architecture](https://jeffreypalermo.com/20
 ├── main.py
 ├── app
 │   ├── domain
-│   │   └── course
-│   │       ├── course.py  # Entity
-│   │       ├── course_exception.py  # Exception definitions
-│   │       └── course_repository.py  # Repository interface
+│   │   └── hours
+│   │       ├── hours.py  # Entity
+│   │       ├── hours_exception.py  # Exception definitions
+│   │       └── hours_repository.py  # Repository interface
 │   ├── infrastructure
 │   │   └── sqlite
-│   │       ├── course
-│   │       │   ├── course_dto.py  # DTO using SQLAlchemy
-│   │       │   ├── course_query_service.py  # Query service implementation
-│   │       │   └── course_repository.py  # Repository implementation
+│   │       ├── hours
+│   │       │   ├── hours_dto.py  # DTO using SQLAlchemy
+│   │       │   ├── hours_query_service.py  # Query service implementation
+│   │       │   └── hours_repository.py  # Repository implementation
 │   │       └── database.py
 │   ├── presentation
 │   │   └── schema
-│   │       └── course
-│   │           └── course_error_message.py
+│   │       └── hours
+│   │           └── hours_error_message.py
 │   └── usecase
-│       └── course
-│           ├── course_command_model.py  # Write models including schemas of the RESTFul API
-│           ├── course_command_usecase.py
-│           ├── course_query_model.py  # Read models including schemas
-│           ├── course_query_service.py  # Query service interface
-│           └── course_query_usecase.py
+│       └── hours
+│           ├── hours_command_model.py  # Write models including schemas of the RESTFul API
+│           ├── hours_command_usecase.py
+│           ├── hours_query_model.py  # Read models including schemas
+│           ├── hours_query_service.py  # Query service interface
+│           └── hours_query_usecase.py
 └── tests
 ```
 

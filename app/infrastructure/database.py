@@ -20,8 +20,6 @@ try:
 
 except KeyError as e:
     pass
-except Exception as e:
-    print("EL ERROR ESTA ACA", e)
 
 Base = declarative_base()
 
