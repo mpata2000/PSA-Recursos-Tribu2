@@ -33,7 +33,7 @@ class HoursCommandUseCaseUnitOfWork(ABC):
 class HoursCommandUseCase(ABC):
     @abstractmethod
     def create_hours(
-        self, data: HoursCreateModel, user_id: str
+        self, data: HoursCreateModel
     ) -> Optional[HoursReadModel]:
         raise NotImplementedError
 
@@ -56,18 +56,20 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
         self.uow: HoursCommandUseCaseUnitOfWork = uow
 
     def create_hours(
-        self, data: HoursCreateModel, user_id: str
+        self, data: HoursCreateModel
     ) -> Optional[HoursReadModel]:
         try:
             uuid = shortuuid.uuid()
             hours = Hours(
                 id=uuid,
-                user_id=user_id,
+                user_id=data.user_id,
+                task_id=data.task_id,
                 day=data.day,
-                minutes=data.minutes
+                minutes=data.minutes,
+                note=data.note
             )
 
-            existing_hours = self.uow.hours_repository.find_existing_hours(data.day,user_id)
+            existing_hours = self.uow.hours_repository.find_existing_hours(data.day, data.user_id)
 
             if existing_hours is not None:
                 raise HoursDayAlreadyExistsError

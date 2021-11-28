@@ -21,6 +21,7 @@ class HoursQueryService(ABC):
         ids: Optional[List[str]],
         day: Optional[str],
         user_id: Optional[str],
+        task_id: Optional[str],
         minutes:Optional[int],
         limit: int = 100,
         offset: int = 0,

@@ -10,7 +10,7 @@ class Hours:
         task_id: str,
         day: str,
         minutes: int,
-        note: str,
+        note: Optional[str] = None,
     ):
         self.id: str = id
         self.user_id: str = user_id

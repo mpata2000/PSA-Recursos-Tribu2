@@ -85,12 +85,11 @@ def hours_command_usecase(
     tags=["hours"],
 )
 async def create_hours(
-    user_id: str,
     data: HoursCreateModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
-        hours = hours_command_usecase.create_hours(data, user_id)
+        hours = hours_command_usecase.create_hours(data)
     except HoursDayAlreadyExistsError as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
