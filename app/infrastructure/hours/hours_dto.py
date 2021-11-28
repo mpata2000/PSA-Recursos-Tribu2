@@ -21,8 +21,8 @@ class HoursDTO(Base):
 
     __tablename__ = "hours"
     id: Union[str, Column] = Column(String, primary_key=True, autoincrement=False)
-    user_id: Union[str, Column] = Column(String, autoincrement=False)
-    task_id: Union[str, Column] = Column(String, autoincrement=False)
+    user_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
+    task_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     day: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     minutes: Union[float, Column] = Column(Float, nullable=False)
     note: Union[str, Column] = Column(String, nullable=True)

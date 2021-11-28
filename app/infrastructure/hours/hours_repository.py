@@ -87,3 +87,5 @@ class HoursCommandUseCaseUnitOfWorkImpl(HoursCommandUseCaseUnitOfWork):
 
     def rollback(self):
         self.session.rollback()
+
+

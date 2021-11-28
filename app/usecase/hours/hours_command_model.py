@@ -12,5 +12,6 @@ class HoursCreateModel(BaseModel):
 
 
 class HoursUpdateModel(BaseModel):
+    task_id: str = Field(example="1")
     day: str = Field(example="25/05/2021")
     minutes: int = Field(ge=0, example=150)

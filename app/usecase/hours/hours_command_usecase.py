@@ -94,6 +94,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
             hours = Hours(
                 id=id,
                 user_id=existing_hours.user_id,
+                task_id=data.task_id,
                 day=data.day,
                 minutes=data.minutes
             )
