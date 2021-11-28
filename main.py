@@ -103,7 +103,7 @@ async def create_hours(
 
     return hours
 
-
+'''
 @app.get(
     "/hours",
     response_model=PaginatedHoursReadModel,
@@ -132,19 +132,20 @@ async def get_hours(
         logger.info(HoursNotFoundError.message)
 
     return PaginatedHoursReadModel(hours=hours, count=count)
-
+'''
 
 @app.get(
-    "/hours/",
+    "/hours",
     response_model=PaginatedHoursReadModel,
     status_code=status.HTTP_200_OK,
     tags=["hours"],
 )
-async def get_hours_filtering(
+async def get_hours(
     ids: Optional[List[str]] = Query(None),
     day: Optional[str] = None,
     user_id: Optional[str] = None,
-    time: Optional[str] = None,
+    task_id: Optional[str] = None,
+    minutes: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
     hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
@@ -155,7 +156,8 @@ async def get_hours_filtering(
             ids=ids,
             day=day,
             user_id=user_id,
-            time=time,
+            task_id=task_id,
+            minutes=minutes,
             limit=limit,
             offset=offset,
         )
@@ -171,7 +173,7 @@ async def get_hours_filtering(
 
     return PaginatedHoursReadModel(hours=hours, count=count)
 
-
+'''
 @app.get(
     "/hours/{id}",
     response_model=HoursReadModel,
@@ -202,7 +204,7 @@ async def get_hours(
         )
 
     return hours
-
+'''
 
 @app.patch(
     "/hours/{id}",

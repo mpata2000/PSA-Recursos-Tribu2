@@ -58,9 +58,9 @@ class HoursRepositoryImpl(HoursRepository):
         except:
             raise
 
-    def find_existing_hours(self, day, user_id) -> Optional[Hours]:
+    def find_existing_hours(self, day, user_id, task_id) -> Optional[Hours]:
         try:
-            hours_dto = self.session.query(HoursDTO).filter_by(day=day, user_id=user_id).one()
+            hours_dto = self.session.query(HoursDTO).filter_by(day=day, user_id=user_id, task_id=task_id).one()
         except NoResultFound:
             return None
         except:

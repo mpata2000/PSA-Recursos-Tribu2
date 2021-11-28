@@ -69,7 +69,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
                 note=data.note
             )
 
-            existing_hours = self.uow.hours_repository.find_existing_hours(data.day, data.user_id)
+            existing_hours = self.uow.hours_repository.find_existing_hours(data.day, data.user_id, data.task_id)
 
             if existing_hours is not None:
                 raise HoursDayAlreadyExistsError
