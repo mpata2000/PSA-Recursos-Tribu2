@@ -75,6 +75,7 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
                 ids=ids,
                 day=day,
                 user_id=user_id,
+                task_id=task_id,
                 minutes=minutes,
                 limit=limit,
                 offset=offset

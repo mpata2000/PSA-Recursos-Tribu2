@@ -6,11 +6,11 @@ from app.domain.hours import Hours
 
 
 class HoursReadModel(BaseModel):
-
-    id: str = Field(example="vytxeTZskVKR7C7WgdSP3d")
-    user_id: str = Field(example="a2s1daxeTZsgdSP3d")
+    user_id: str = Field(example="1")
+    task_id: str = Field(example="1")
     day: str = Field(example="25/05/2021")
-    minutes: int = Field(ge=0, example=10)
+    minutes: int = Field(ge=0, example=150)
+    note: str = Field(example="Descripcion")
 
     class Config:
         orm_mode = True
@@ -20,8 +20,10 @@ class HoursReadModel(BaseModel):
         return HoursReadModel(
             id=hours.id,
             user_id=hours.user_id,
+            task_id=hours.task_id,
             day=hours.day,
-            minutes=hours.minutes
+            minutes=hours.minutes,
+            note=hours.note
         )
 
 
