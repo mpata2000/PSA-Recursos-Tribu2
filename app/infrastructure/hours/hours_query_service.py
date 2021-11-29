@@ -53,14 +53,14 @@ class HoursQueryServiceImpl(HoursQueryService):
         try:
             hours_q = self.session.query(HoursDTO)
 
-            #TODO: Agregar el resto de filtros
-
             if ids:
                 hours_q = hours_q.filter(HoursDTO.id.in_(ids))  # type: ignore
             if day:
                 hours_q = hours_q.filter_by(day=day)
             if user_id:
                 hours_q = hours_q.filter_by(user_id=user_id)
+            if task_id:
+                hours_q = hours_q.filter_by(task_id=task_id)
             if minutes:
                 hours_q = hours_q.filter_by(minutes=minutes)
 
