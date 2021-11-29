@@ -122,3 +122,5 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
         except:
             self.uow.rollback()
             raise
+
+        return HoursReadModel.from_entity(cast(Hours, existing_hours))

@@ -255,7 +255,7 @@ async def delete_hours(
     query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
-        hours_command_usecase.delete_hours_by_id(id)
+        deleted_hour = hours_command_usecase.delete_hours_by_id(id)
     except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -266,6 +266,8 @@ async def delete_hours(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+
+    return deleted_hour
 
 @app.get("/resources")
 async def get_resources():
