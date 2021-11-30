@@ -25,7 +25,8 @@ class HoursQueryUseCase(ABC):
         ids: Optional[List[str]],
         day: Optional[str],
         user_id: Optional[str],
-        time: Optional[int],
+        task_id: Optional[str],
+        minutes: Optional[int],
         limit: int = 100,
         offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
@@ -61,10 +62,11 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
 
     def fetch_hours_by_filters(
         self,
-        ids: Optional[List[str]] = None,
-        day: Optional[str] = None,
-        user_id: Optional[str] = None,
-        minutes: Optional[int] = None,
+        ids: Optional[List[str]],
+        day: Optional[str],
+        user_id: Optional[str],
+        task_id: Optional[str],
+        minutes: Optional[int],
         limit: int = 100,
         offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
@@ -73,6 +75,7 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
                 ids=ids,
                 day=day,
                 user_id=user_id,
+                task_id=task_id,
                 minutes=minutes,
                 limit=limit,
                 offset=offset

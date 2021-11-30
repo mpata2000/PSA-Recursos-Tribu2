@@ -26,5 +26,5 @@ class HoursRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def find_existing_hours(self, day, user_id):
+    def find_existing_hours(self, day, user_id, task_id):
         raise NotImplementedError

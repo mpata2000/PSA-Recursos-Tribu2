@@ -21,24 +21,30 @@ class HoursDTO(Base):
 
     __tablename__ = "hours"
     id: Union[str, Column] = Column(String, primary_key=True, autoincrement=False)
-    user_id: Union[str, Column] = Column(String, autoincrement=False)
+    user_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
+    task_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     day: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
-    minutes:Union[float, Column] = Column(Float, nullable=False)
+    minutes: Union[float, Column] = Column(Float, nullable=False)
+    note: Union[str, Column] = Column(String, nullable=True)
 
     def to_entity(self) -> Hours:
         return Hours(
             id=self.id,
             user_id=self.user_id,
+            task_id=self.task_id,
             day=self.day,
             minutes=self.minutes,
+            note=self.note
         )
 
     def to_read_model(self) -> HoursReadModel:
         return HoursReadModel(
             id=self.id,
             user_id=self.user_id,
+            task_id=self.task_id,
             day=self.day,
             minutes=self.minutes,
+            note=self.note
         )
 
     @staticmethod
@@ -46,6 +52,8 @@ class HoursDTO(Base):
         return HoursDTO(
             id=hours.id,
             user_id=hours.user_id,
+            task_id=hours.task_id,
             day=hours.day,
             minutes=hours.minutes,
+            note=hours.note
         )
