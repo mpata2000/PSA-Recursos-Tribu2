@@ -2,6 +2,7 @@ import ast
 import json
 import logging
 import os
+from datetime import datetime
 from logging import config
 from typing import Iterator, List, Optional
 
@@ -27,7 +28,7 @@ from app.infrastructure.hours import (
 
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
-    ErrorMessageHoursNotFound,
+    ErrorMessageHoursNotFound, ErrorMessageResourcesNotFound,
 )
 from app.usecase.hours import (
     HoursCommandUseCase,
@@ -40,7 +41,7 @@ from app.usecase.hours import (
     HoursReadModel,
     HoursUpdateModel,
 )
-from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
+from app.usecase.hours.hours_query_model import PaginatedHoursReadModel, ResourcesReadModel, PaginatedResourcesReadModel
 
 config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
@@ -88,6 +89,12 @@ async def create_hours(
     data: HoursCreateModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
+    try:
+        datetime.strptime(data.day, "%d/%m/%Y")
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_412_PRECONDITION_FAILED,
+        )
     try:
         hours = hours_command_usecase.create_hours(data)
     except HoursDayAlreadyExistsError as e:
@@ -269,6 +276,17 @@ async def delete_hours(
 
     return deleted_hour
 
-@app.get("/resources")
+@app.get(
+    "/resources",
+    response_model=PaginatedResourcesReadModel,
+    status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "model": ErrorMessageResourcesNotFound,
+        },
+    },
+)
 async def get_resources():
-    return json.loads(requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+    data = json.loads(requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+
+    return PaginatedResourcesReadModel(resources=data, count=len(data))

@@ -31,3 +31,43 @@ class HoursReadModel(BaseModel):
 class PaginatedHoursReadModel(BaseModel):
     hours: List[HoursReadModel] = Field(example=HoursReadModel.schema())
     count: int = Field(ge=0, example=1)
+
+
+class Resources:
+    def __init__(
+            self,
+            legajo: str,
+            Nombre: str,
+            Apellido: str,
+    ):
+        self.legajo: str = legajo
+        self.Nombre: str = Nombre
+        self.Apellido: str = Apellido
+
+    def __eq__(self, o: object) -> bool:
+        if isinstance(o, Resources):
+            return self.id == o.id
+
+        return False
+
+
+class ResourcesReadModel(BaseModel):
+    legajo: str = Field(example="123123")
+    Nombre: str = Field(example="Mendez")
+    Apellido: str = Field(example="Argerich")
+
+    class Config:
+        orm_mode = True
+
+    @staticmethod
+    def from_entity(resources: Resources) -> "ResourcesReadModel":
+        return ResourcesReadModel(
+            legajo=resources.legajo,
+            Nombre=resources.Nombre,
+            Apellido=resources.Apellido,
+
+        )
+
+class PaginatedResourcesReadModel(BaseModel):
+    resources: List[ResourcesReadModel] = Field(example=ResourcesReadModel.schema())
+    count: int = Field(ge=0, example=1)
