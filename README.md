@@ -1,7 +1,6 @@
-# ubademy.service.pytemplate
+# PSA Recursos - Tribu 2 - Suqad 11
 [![codecov](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2/branch/main/graph/badge.svg?token=T726IGKKWO)](https://codecov.io/gh/mpata2000/PSA-Recursos-Tribu2) [![Tests](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/test.yml) [![Deploy](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml/badge.svg)](https://github.com/mpata2000/PSA-Recursos-Tribu2/actions/workflows/deploy.yml)
 
-This is a template repository for a REST api on python.
 
 ## Technologies
 
