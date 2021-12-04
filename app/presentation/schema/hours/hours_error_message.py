@@ -14,9 +14,6 @@ class ErrorMessageHoursNotFound(BaseModel):
 class ErrorMessageHoursDayAlreadyExists(BaseModel):
     detail: str = Field(example=HoursDayAlreadyExistsError.message)
 
-class ErrorMessageResourcesNotFound(BaseModel):
-    detail: str = Field(example="ResourcesNotFound")
-
 
 class ErrorMessageHoursNotFound(BaseModel):
     detail: str = Field(example=HoursNotFoundError.message)

@@ -28,8 +28,9 @@ from app.infrastructure.hours import (
 
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
-    ErrorMessageHoursNotFound, ErrorMessageResourcesNotFound,
+    ErrorMessageHoursNotFound,
 )
+from app.presentation.schema.resources.resources_error_message import ErrorMessageResourcesNotFound
 from app.usecase.hours import (
     HoursCommandUseCase,
     HoursCommandUseCaseImpl,
@@ -41,7 +42,8 @@ from app.usecase.hours import (
     HoursReadModel,
     HoursUpdateModel,
 )
-from app.usecase.hours.hours_query_model import PaginatedHoursReadModel, ResourcesReadModel, PaginatedResourcesReadModel
+from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
+from app.usecase.resources.resources_query_model import PaginatedResourcesReadModel
 
 config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)

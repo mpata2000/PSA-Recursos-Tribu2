@@ -1,0 +1,1 @@
+from .resources_query_model import ResourcesReadModel
