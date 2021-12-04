@@ -28,7 +28,7 @@ from app.infrastructure.hours import (
 
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
-    ErrorMessageHoursNotFound,
+    ErrorMessageHoursNotFound, ErrorMessageHoursNotValidDate,
 )
 from app.presentation.schema.resources.resources_error_message import ErrorMessageResourcesNotFound
 from app.usecase.hours import (
@@ -83,6 +83,9 @@ def hours_command_usecase(
     responses={
         status.HTTP_409_CONFLICT: {
             "model": ErrorMessageHoursDayAlreadyExists,
+        },
+        status.HTTP_412_PRECONDITION_FAILED: {
+            "model": ErrorMessageHoursNotValidDate,
         },
     },
     tags=["hours"],
