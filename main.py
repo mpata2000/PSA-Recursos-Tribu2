@@ -110,36 +110,6 @@ async def create_hours(
 
     return hours
 
-'''
-@app.get(
-    "/hours",
-    response_model=PaginatedHoursReadModel,
-    status_code=status.HTTP_200_OK,
-    tags=["hours"],
-)
-async def get_hours(
-    limit: int = 50,
-    offset: int = 0,
-    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
-):
-    try:
-        hours, count = hours_query_usecase.fetch_hours(limit=limit, offset=offset)
-    except HoursNotFoundError as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-    except Exception as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-    if len(hours) == 0:
-        logger.info(HoursNotFoundError.message)
-
-    return PaginatedHoursReadModel(hours=hours, count=count)
-'''
 
 @app.get(
     "/hours",
@@ -180,38 +150,6 @@ async def get_hours(
 
     return PaginatedHoursReadModel(hours=hours, count=count)
 
-'''
-@app.get(
-    "/hours/{id}",
-    response_model=HoursReadModel,
-    status_code=status.HTTP_200_OK,
-    responses={
-        status.HTTP_404_NOT_FOUND: {
-            "model": ErrorMessageHoursNotFound,
-        },
-    },
-    tags=["hours"],
-)
-async def get_hours(
-    id: str,
-    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
-):
-    try:
-        hours = hours_query_usecase.fetch_hours_by_id(id)
-
-    except HoursNotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=e.message,
-        )
-    except Exception as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-    return hours
-'''
 
 @app.patch(
     "/hours/{id}",
