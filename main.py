@@ -187,6 +187,7 @@ async def update_hours(
 @app.delete(
     "/hours/{id}",
     status_code=status.HTTP_202_ACCEPTED,
+    response_model=HoursReadModel,
     responses={
         status.HTTP_404_NOT_FOUND: {
             "model": ErrorMessageHoursNotFound,
