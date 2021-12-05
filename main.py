@@ -48,7 +48,21 @@ from app.usecase.resources.resources_query_model import PaginatedResourcesReadMo
 config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="hours")
+description = """
+API de recursos de PSA para la Tribu 2 por el Squad 11
+
+## Hours
+
+- Date in requests and responses will be represented as a `str` in `ISO 8601` format, like: `2008-09-15`.
+- You can not create a new hour by the same user in the same day at the same task twice, you have to update it
+
+"""
+
+app = FastAPI(
+    title="PSA Recursos",
+    version="1.0.0",
+    description=description,
+)
 
 create_tables()
 
