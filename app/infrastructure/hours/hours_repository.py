@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -23,7 +24,7 @@ class HoursRepositoryImpl(HoursRepository):
 
         return hours_dto.to_entity()
 
-    def find_by_day(self, day: str) -> Optional[Hours]:
+    def find_by_day(self, day: date) -> Optional[Hours]:
         try:
             hours_dto = self.session.query(HoursDTO).filter_by(day=day).one()
         except NoResultFound:

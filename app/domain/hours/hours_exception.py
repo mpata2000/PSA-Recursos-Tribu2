@@ -17,3 +17,9 @@ class HoursNotFoundError(Exception):
 
     def __str__(self):
         return HoursNotFoundError.message
+
+class HoursNotValidDateError(Exception):
+    message = "invalid date format"
+
+    def __str__(self):
+        return HoursNotValidDateError.message

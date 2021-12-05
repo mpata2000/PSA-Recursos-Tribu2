@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Union
 from app.domain.hours import Hours
 
-from sqlalchemy import Column, Float, String
+from sqlalchemy import Column, Float, String, Date
 from sqlalchemy.orm import relationship
 
 from app.domain.hours import Hours
@@ -23,7 +23,7 @@ class HoursDTO(Base):
     id: Union[str, Column] = Column(String, primary_key=True, autoincrement=False)
     user_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     task_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
-    day: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
+    day: Union[date, Column] = Column(Date, nullable=False, autoincrement=False)
     minutes: Union[float, Column] = Column(Float, nullable=False)
     note: Union[str, Column] = Column(String, nullable=True)
 

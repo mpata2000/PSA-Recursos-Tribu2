@@ -2,6 +2,7 @@ import ast
 import json
 import logging
 import os
+from datetime import datetime, date
 from logging import config
 from typing import Iterator, List, Optional
 
@@ -27,8 +28,9 @@ from app.infrastructure.hours import (
 
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
-    ErrorMessageHoursNotFound,
+    ErrorMessageHoursNotFound, ErrorMessageHoursNotValidDate,
 )
+from app.presentation.schema.resources.resources_error_message import ErrorMessageResourcesNotFound
 from app.usecase.hours import (
     HoursCommandUseCase,
     HoursCommandUseCaseImpl,
@@ -41,11 +43,26 @@ from app.usecase.hours import (
     HoursUpdateModel,
 )
 from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
+from app.usecase.resources.resources_query_model import PaginatedResourcesReadModel
 
 config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="hours")
+description = """
+API de recursos de PSA para la Tribu 2 por el Squad 11
+
+## Hours
+
+- Date in requests and responses will be represented as a `str` in `ISO 8601` format, like: `2008-09-15`.
+- You can not create a new hour by the same user in the same day at the same task twice, you have to update it
+
+"""
+
+app = FastAPI(
+    title="PSA Recursos",
+    version="1.0.0",
+    description=description,
+)
 
 create_tables()
 
@@ -81,6 +98,9 @@ def hours_command_usecase(
         status.HTTP_409_CONFLICT: {
             "model": ErrorMessageHoursDayAlreadyExists,
         },
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
+            "model": ErrorMessageHoursNotValidDate,
+        },
     },
     tags=["hours"],
 )
@@ -88,6 +108,7 @@ async def create_hours(
     data: HoursCreateModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
+
     try:
         hours = hours_command_usecase.create_hours(data)
     except HoursDayAlreadyExistsError as e:
@@ -103,36 +124,6 @@ async def create_hours(
 
     return hours
 
-'''
-@app.get(
-    "/hours",
-    response_model=PaginatedHoursReadModel,
-    status_code=status.HTTP_200_OK,
-    tags=["hours"],
-)
-async def get_hours(
-    limit: int = 50,
-    offset: int = 0,
-    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
-):
-    try:
-        hours, count = hours_query_usecase.fetch_hours(limit=limit, offset=offset)
-    except HoursNotFoundError as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-    except Exception as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-    if len(hours) == 0:
-        logger.info(HoursNotFoundError.message)
-
-    return PaginatedHoursReadModel(hours=hours, count=count)
-'''
 
 @app.get(
     "/hours",
@@ -142,7 +133,7 @@ async def get_hours(
 )
 async def get_hours(
     ids: Optional[List[str]] = Query(None),
-    day: Optional[str] = None,
+    day: Optional[date] = None,
     user_id: Optional[str] = None,
     task_id: Optional[str] = None,
     minutes: Optional[str] = None,
@@ -150,7 +141,6 @@ async def get_hours(
     offset: int = 0,
     hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
-
     try:
         hours, count = hours_query_usecase.fetch_hours_by_filters(
             ids=ids,
@@ -173,38 +163,6 @@ async def get_hours(
 
     return PaginatedHoursReadModel(hours=hours, count=count)
 
-'''
-@app.get(
-    "/hours/{id}",
-    response_model=HoursReadModel,
-    status_code=status.HTTP_200_OK,
-    responses={
-        status.HTTP_404_NOT_FOUND: {
-            "model": ErrorMessageHoursNotFound,
-        },
-    },
-    tags=["hours"],
-)
-async def get_hours(
-    id: str,
-    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
-):
-    try:
-        hours = hours_query_usecase.fetch_hours_by_id(id)
-
-    except HoursNotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=e.message,
-        )
-    except Exception as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-    return hours
-'''
 
 @app.patch(
     "/hours/{id}",
@@ -242,6 +200,7 @@ async def update_hours(
 @app.delete(
     "/hours/{id}",
     status_code=status.HTTP_202_ACCEPTED,
+    response_model=HoursReadModel,
     responses={
         status.HTTP_404_NOT_FOUND: {
             "model": ErrorMessageHoursNotFound,
@@ -269,6 +228,18 @@ async def delete_hours(
 
     return deleted_hour
 
-@app.get("/resources")
+@app.get(
+    "/resources",
+    response_model=PaginatedResourcesReadModel,
+    status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "model": ErrorMessageResourcesNotFound,
+        },
+    },
+    tags=["resources"],
+)
 async def get_resources():
-    return json.loads(requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+    data = json.loads(requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+
+    return PaginatedResourcesReadModel(resources=data, count=len(data))

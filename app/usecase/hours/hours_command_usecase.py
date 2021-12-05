@@ -96,7 +96,6 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
                 user_id=existing_hours.user_id,
                 task_id=data.task_id,
                 day=data.day,
-                minutes=data.minutes
             )
 
             self.uow.hours_repository.update(hours)

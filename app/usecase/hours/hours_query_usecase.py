@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import date
 from typing import List, Optional, Tuple
 
 from app.domain.hours import HoursNotFoundError
@@ -23,7 +24,7 @@ class HoursQueryUseCase(ABC):
     def fetch_hours_by_filters(
         self,
         ids: Optional[List[str]],
-        day: Optional[str],
+        day: Optional[date],
         user_id: Optional[str],
         task_id: Optional[str],
         minutes: Optional[int],
@@ -63,7 +64,7 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
     def fetch_hours_by_filters(
         self,
         ids: Optional[List[str]],
-        day: Optional[str],
+        day: Optional[date],
         user_id: Optional[str],
         task_id: Optional[str],
         minutes: Optional[int],
