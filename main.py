@@ -2,7 +2,7 @@ import ast
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, date
 from logging import config
 from typing import Iterator, List, Optional
 
@@ -84,7 +84,7 @@ def hours_command_usecase(
         status.HTTP_409_CONFLICT: {
             "model": ErrorMessageHoursDayAlreadyExists,
         },
-        status.HTTP_412_PRECONDITION_FAILED: {
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
             "model": ErrorMessageHoursNotValidDate,
         },
     },
@@ -94,12 +94,7 @@ async def create_hours(
     data: HoursCreateModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
-    try:
-        datetime.strptime(data.day, "%d/%m/%Y")
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_412_PRECONDITION_FAILED,
-        )
+
     try:
         hours = hours_command_usecase.create_hours(data)
     except HoursDayAlreadyExistsError as e:
@@ -124,7 +119,7 @@ async def create_hours(
 )
 async def get_hours(
     ids: Optional[List[str]] = Query(None),
-    day: Optional[str] = None,
+    day: Optional[date] = None,
     user_id: Optional[str] = None,
     task_id: Optional[str] = None,
     minutes: Optional[str] = None,
@@ -132,7 +127,6 @@ async def get_hours(
     offset: int = 0,
     hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
-
     try:
         hours, count = hours_query_usecase.fetch_hours_by_filters(
             ids=ids,

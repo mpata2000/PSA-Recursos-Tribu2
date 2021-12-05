@@ -8,14 +8,14 @@ class Hours:
         id: str,
         user_id: str,
         task_id: str,
-        day: str,
+        day: date,
         minutes: int,
         note: Optional[str] = None,
     ):
         self.id: str = id
         self.user_id: str = user_id
         self.task_id: str = task_id
-        self.day: str = day
+        self.day: date = day
         self.minutes: int = minutes
         self.note: str = note
 
