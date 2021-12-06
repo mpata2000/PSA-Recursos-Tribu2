@@ -9,6 +9,7 @@ from typing import Iterator, List, Optional
 import requests
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from sqlalchemy.orm.session import Session
+from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 
 from app.domain.hours import (
@@ -62,6 +63,14 @@ app = FastAPI(
     title="PSA Recursos",
     version="1.0.0",
     description=description,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 create_tables()
