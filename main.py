@@ -1,8 +1,7 @@
-import ast
+
 import json
 import logging
-import os
-from datetime import datetime, date
+from datetime import date
 from logging import config
 from typing import Iterator, List, Optional
 
@@ -10,7 +9,6 @@ import requests
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from sqlalchemy.orm.session import Session
 from starlette.middleware.cors import CORSMiddleware
-from starlette.requests import Request
 
 from app.domain.hours import (
     HoursDayAlreadyExistsError,
@@ -168,7 +166,7 @@ async def get_hours(
         )
 
     if hours is None or len(hours) == 0:
-        logger.info(HoursNotFoundErrorInDate.message)
+        logger.info(HoursNotFoundError.message)
 
     return PaginatedHoursReadModel(hours=hours, count=count)
 
@@ -188,7 +186,6 @@ async def update_hours(
     id: str,
     data: HoursUpdateModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
-    query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
         updated_hours = hours_command_usecase.update_hours(id, data)
@@ -220,7 +217,6 @@ async def update_hours(
 async def delete_hours(
     id: str,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
-    query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
         deleted_hour = hours_command_usecase.delete_hours_by_id(id)
@@ -237,6 +233,7 @@ async def delete_hours(
 
     return deleted_hour
 
+
 @app.get(
     "/resources",
     response_model=PaginatedResourcesReadModel,
@@ -249,6 +246,8 @@ async def delete_hours(
     tags=["resources"],
 )
 async def get_resources():
-    data = json.loads(requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+    data = json.loads(
+        requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc"
+                     "-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
 
     return PaginatedResourcesReadModel(resources=data, count=len(data))
