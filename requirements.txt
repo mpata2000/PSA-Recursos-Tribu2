@@ -7,4 +7,4 @@ sqlalchemy
 shortuuid
 pytest
 pytest-cov
-covarage
+coverage

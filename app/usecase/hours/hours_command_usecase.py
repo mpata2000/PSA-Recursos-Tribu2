@@ -95,6 +95,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
                 id=id,
                 user_id=existing_hours.user_id,
                 task_id=data.task_id,
+                minute=data.minute,
                 day=data.day,
             )
 
