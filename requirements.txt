@@ -5,4 +5,6 @@ httptools
 requests
 sqlalchemy
 shortuuid
+pytest
+pytest-cov
 covarage
