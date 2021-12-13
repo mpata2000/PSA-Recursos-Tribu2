@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional, Tuple
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -5,7 +6,7 @@ from sqlalchemy.orm.session import Session
 
 from app.usecase.hours import HoursQueryService, HoursReadModel
 
-from ...domain.hours import HoursNotFoundError
+from ...domain.hours import HoursNotFoundErrorInDate
 from .hours_dto import HoursDTO
 
 
@@ -33,7 +34,7 @@ class HoursQueryServiceImpl(HoursQueryService):
                 .all()
             )
         except:
-            raise HoursNotFoundError
+            raise HoursNotFoundErrorInDate
 
         return (
             list(map(lambda hours_dto: hours_dto.to_read_model(), hours_dtos)),
@@ -43,7 +44,7 @@ class HoursQueryServiceImpl(HoursQueryService):
     def find_by_filters(
         self,
         ids: Optional[List[str]],
-        day: Optional[str],
+        day: Optional[date],
         user_id: Optional[str],
         task_id: Optional[str],
         minutes: Optional[int],

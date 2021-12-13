@@ -1,8 +1,8 @@
-class HoursNotFoundError(Exception):
+class HoursNotFoundErrorInDate(Exception):
     message = "The Hours for the day you specified do not exist."
 
     def __str__(self):
-        return HoursNotFoundError.message
+        return HoursNotFoundErrorInDate.message
 
 
 class HoursDayAlreadyExistsError(Exception):
@@ -17,6 +17,7 @@ class HoursNotFoundError(Exception):
 
     def __str__(self):
         return HoursNotFoundError.message
+
 
 class HoursNotValidDateError(Exception):
     message = "invalid date format"

@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
-from app.domain.hours import Hours, HoursNotFoundError, HoursRepository
+from app.domain.hours import Hours, HoursNotFoundErrorInDate, HoursRepository
 from app.usecase.hours import HoursCommandUseCaseUnitOfWork
 
 from .hours_dto import HoursDTO

@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, Mock
 
 import pytest
 
-from app.domain.hours import HoursNotFoundError
+from app.domain.hours import HoursNotFoundErrorInDate
 from app.infrastructure.hours import HoursQueryServiceImpl
 
 from app.usecase.hours import HoursReadModel, HoursQueryUseCaseImpl
@@ -34,11 +34,11 @@ class TestBookQueryUseCase:
 
         session = MagicMock()
         course_query_service = HoursQueryServiceImpl(session)
-        course_query_service.find_by_id = Mock(side_effect=HoursNotFoundError)
+        course_query_service.find_by_id = Mock(side_effect=HoursNotFoundErrorInDate)
 
         course_query_usecase = HoursQueryUseCaseImpl(course_query_service)
 
-        with pytest.raises(HoursNotFoundError):
+        with pytest.raises(HoursNotFoundErrorInDate):
             course_query_usecase.fetch_hours_by_id("cPqw4yPVUM3fA9sqzpZmkL")
 
     def test_fetch_courses_should_return_courses(self):

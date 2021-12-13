@@ -16,7 +16,7 @@ from app.domain.hours import (
     HoursDayAlreadyExistsError,
     HoursNotFoundError,
     HoursRepository,
-    HoursNotFoundError,
+    HoursNotFoundErrorInDate,
 )
 from app.infrastructure.database import create_tables, SessionLocal
 
@@ -168,7 +168,7 @@ async def get_hours(
         )
 
     if hours is None or len(hours) == 0:
-        logger.info(HoursNotFoundError.message)
+        logger.info(HoursNotFoundErrorInDate.message)
 
     return PaginatedHoursReadModel(hours=hours, count=count)
 
@@ -192,7 +192,7 @@ async def update_hours(
 ):
     try:
         updated_hours = hours_command_usecase.update_hours(id, data)
-    except HoursNotFoundError as e:
+    except HoursNotFoundErrorInDate as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,
@@ -224,7 +224,7 @@ async def delete_hours(
 ):
     try:
         deleted_hour = hours_command_usecase.delete_hours_by_id(id)
-    except HoursNotFoundError as e:
+    except HoursNotFoundErrorInDate as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,

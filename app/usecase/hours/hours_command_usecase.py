@@ -6,7 +6,7 @@ import shortuuid
 from app.domain.hours import (
     Hours,
     HoursDayAlreadyExistsError,
-    HoursNotFoundError,
+    HoursNotFoundErrorInDate,
     HoursRepository,
 )
 from .hours_command_model import HoursCreateModel, HoursUpdateModel
@@ -89,7 +89,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
         try:
             existing_hours = self.uow.hours_repository.find_by_id(id)
             if existing_hours is None:
-                raise HoursNotFoundError
+                raise HoursNotFoundErrorInDate
 
             hours = Hours(
                 id=id,
@@ -113,7 +113,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
         try:
             existing_hours = self.uow.hours_repository.find_by_id(id)
             if existing_hours is None:
-                raise HoursNotFoundError
+                raise HoursNotFoundErrorInDate
 
             self.uow.hours_repository.delete_by_id(id)
 

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from datetime import date
 from typing import List, Optional, Tuple
 
-from app.domain.hours import HoursNotFoundError
+from app.domain.hours import HoursNotFoundErrorInDate
 from app.usecase.hours.hours_query_model import HoursReadModel
 
 from .hours_query_service import HoursQueryService
@@ -43,7 +43,7 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
         try:
             hours = self.hours_query_service.find_by_id(id)
             if hours is None:
-                raise HoursNotFoundError
+                raise HoursNotFoundErrorInDate
         except:
             raise
 

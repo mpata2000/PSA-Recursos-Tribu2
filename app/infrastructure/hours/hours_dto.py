@@ -24,7 +24,7 @@ class HoursDTO(Base):
     user_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     task_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     day: Union[date, Column] = Column(Date, nullable=False, autoincrement=False)
-    minutes: Union[float, Column] = Column(Float, nullable=False)
+    minutes: Union[int, Column] = Column(Float, nullable=False)
     note: Union[str, Column] = Column(String, nullable=True)
 
     def to_entity(self) -> Hours:
