@@ -5,3 +5,4 @@ httptools
 requests
 sqlalchemy
 shortuuid
+covarage
