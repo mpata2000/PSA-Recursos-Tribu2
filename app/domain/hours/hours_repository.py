@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import date
 from typing import Optional
 
 from app.domain.hours import Hours
@@ -7,7 +6,7 @@ from app.domain.hours import Hours
 
 class HoursRepository(ABC):
     @abstractmethod
-    def create(self, hour: Hours) -> Optional[Hours]:
+    def create(self, hours: Hours) -> Optional[Hours]:
         raise NotImplementedError
 
     @abstractmethod

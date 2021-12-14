@@ -1,4 +1,3 @@
-
 import json
 import logging
 from datetime import date
@@ -22,7 +21,6 @@ from app.infrastructure.hours import (
     HoursQueryServiceImpl,
     HoursRepositoryImpl,
 )
-
 
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
@@ -88,7 +86,7 @@ def hours_query_usecase(session: Session = Depends(get_session)) -> HoursQueryUs
 
 
 def hours_command_usecase(
-    session: Session = Depends(get_session),
+        session: Session = Depends(get_session),
 ) -> HoursCommandUseCase:
     hours_repository: HoursRepository = HoursRepositoryImpl(session)
     uow: HoursCommandUseCaseUnitOfWork = HoursCommandUseCaseUnitOfWorkImpl(
@@ -112,10 +110,9 @@ def hours_command_usecase(
     tags=["hours"],
 )
 async def create_hours(
-    data: HoursCreateModel,
-    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
+        data: HoursCreateModel,
+        hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
-
     try:
         hours = hours_command_usecase.create_hours(data)
     except HoursDayAlreadyExistsError as e:
@@ -139,14 +136,14 @@ async def create_hours(
     tags=["hours"],
 )
 async def get_hours(
-    ids: Optional[List[str]] = Query(None),
-    day: Optional[date] = None,
-    user_id: Optional[str] = None,
-    task_id: Optional[str] = None,
-    minutes: Optional[int] = None,
-    limit: int = 50,
-    offset: int = 0,
-    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
+        ids: Optional[List[str]] = Query(None),
+        day: Optional[date] = None,
+        user_id: Optional[str] = None,
+        task_id: Optional[str] = None,
+        minutes: Optional[int] = None,
+        limit: int = 50,
+        offset: int = 0,
+        hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
         hours, count = hours_query_usecase.fetch_hours_by_filters(
@@ -183,9 +180,9 @@ async def get_hours(
     tags=["hours"],
 )
 async def put_hours(
-    id: str,
-    data: HoursPutModel,
-    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
+        id: str,
+        data: HoursPutModel,
+        hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
         updated_hours = hours_command_usecase.put_hours(id, data)
@@ -215,8 +212,8 @@ async def put_hours(
     tags=["hours"],
 )
 async def delete_hours(
-    id: str,
-    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
+        id: str,
+        hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
         deleted_hour = hours_command_usecase.delete_hours_by_id(id)
@@ -247,7 +244,10 @@ async def delete_hours(
 )
 async def get_resources():
     data = json.loads(
-        requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc"
-                     "-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+        requests.get(
+            "https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc"
+            "-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos"
+        ).text
+    )
 
     return PaginatedResourcesReadModel(resources=data, count=len(data))

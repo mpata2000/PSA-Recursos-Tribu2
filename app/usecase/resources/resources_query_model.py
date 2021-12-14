@@ -1,4 +1,4 @@
-from typing import List, cast
+from typing import List
 from pydantic import BaseModel, Field
 from app.domain.resources import Resources
 
