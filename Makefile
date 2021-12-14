@@ -1,5 +1,5 @@
 POETRY=poetry
-PYTEST=$(POETRY) run pytest --cache-clear --cov=app tests/ --cov-report=xml > pytest-coverage.txt
+PYTEST=$(POETRY) run pytest --cache-clear --cov-config=.coveragerc --cov=app tests/ --cov-report=xml > pytest-coverage.txt
 MYPY=$(POETRY) run mypy --ignore-missing-imports
 BLACK=$(POETRY) run black
 ISORT=$(POETRY) run isort
@@ -15,8 +15,7 @@ update:
 	$(POETRY) update
 	$(POETRY_EXPORT)
 
-test: install  
-	$(MYPY) main.py ./${PACKAGE}/
+test: install
 	$(PYTEST) -vv
 
 fmt:
@@ -24,7 +23,13 @@ fmt:
 	$(BLACK) main.py ./${PACKAGE} ./tests
 
 lint:
+	$(MYPY) main.py ./${PACKAGE}/
 	$(PYLINT) main.py ./${PACKAGE}
 
-dev:
-	${UVICORN} main:app --reload
+build:
+	$ docker-compose build
+
+run:
+	$ docker-compose up
+
+all: fmt lint test build run

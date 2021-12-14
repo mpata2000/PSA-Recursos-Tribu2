@@ -8,6 +8,15 @@ from app.domain.hours import HoursNotFoundError, Hours, HoursDayAlreadyExistsErr
 from app.infrastructure.hours import HoursDTO, HoursRepositoryImpl
 from app.presentation.schema.hours.hours_error_message import ErrorMessageHoursDayAlreadyExists
 
+hours_1 = Hours(
+    id="QK6qXDKUYf3p8x7Vb4SNas",
+    user_id="106226",
+    task_id="P03",
+    day="2020-10-10",
+    minutes=60,
+    note="Un buen trabajo",
+)
+
 hours_dto_1= HoursDTO(
     id="QK6qXDKUYf3p8x7Vb4SNas",
     user_id="106226",
@@ -102,7 +111,8 @@ class TestHoursRepository:
         session.query(HoursDTO).filter_by = Mock(side_effect=query_course_1)
         hours_repository = HoursRepositoryImpl(session)
 
-        hours_repository.find_existing_hours(day="2020-10-10", user_id="106226", task_id="P03")
+        hours = hours_repository.find_existing_hours(day="2020-10-10", user_id="106226", task_id="P03")
+        #assert hours == hours_1
         session.query(HoursDTO).filter_by.assert_called_with(day="2020-10-10", user_id="106226", task_id="P03")
 
     def test_delete_by_id_should_delete_correct_course(self):
