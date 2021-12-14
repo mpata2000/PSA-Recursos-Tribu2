@@ -1,11 +1,11 @@
 import json
 import logging
-import requests
 
 from datetime import date
 from logging import config
 from typing import Iterator, List, Optional
 
+import requests
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from sqlalchemy.orm.session import Session
 from starlette.middleware.cors import CORSMiddleware
