@@ -24,31 +24,10 @@ class HoursRepositoryImpl(HoursRepository):
 
         return hours_dto.to_entity()
 
-    def find_by_day(self, day: date) -> Optional[Hours]:
-        try:
-            hours_dto = self.session.query(HoursDTO).filter_by(day=day).one()
-        except NoResultFound:
-            return None
-        except:
-            raise
-
-        return hours_dto.to_entity()
-
     def create(self, hours: Hours):
         hours_dto = HoursDTO.from_entity(hours)
         try:
             self.session.add(hours_dto)
-        except:
-            raise
-
-    def update(self, hours: Hours):
-        hours_dto = HoursDTO.from_entity(hours)
-        try:
-            _hours = self.session.query(HoursDTO).filter_by(id=hours_dto.id).one()
-            if hours_dto.day:
-                _hours.day = hours_dto.day
-            if hours_dto.minutes is not None:
-                _hours.minutes = hours_dto.minutes
         except:
             raise
 

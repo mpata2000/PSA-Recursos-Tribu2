@@ -9,7 +9,7 @@ from app.domain.hours import (
     HoursNotFoundErrorInDate,
     HoursRepository,
 )
-from .hours_command_model import HoursCreateModel, HoursUpdateModel
+from .hours_command_model import HoursCreateModel, HoursPutModel
 from .hours_query_model import HoursReadModel
 
 
@@ -38,8 +38,8 @@ class HoursCommandUseCase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update_hours(
-        self, id: str, data: HoursUpdateModel
+    def put_hours(
+        self, id: str, data: HoursPutModel
     ) -> Optional[HoursReadModel]:
         raise NotImplementedError
 
@@ -83,8 +83,8 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
 
         return HoursReadModel.from_entity(cast(Hours, created_hours))
 
-    def update_hours(
-        self, id: str, data: HoursUpdateModel
+    def put_hours(
+        self, id: str, data: HoursPutModel
     ) -> Optional[HoursReadModel]:
         try:
             existing_hours = self.uow.hours_repository.find_by_id(id)
@@ -94,16 +94,19 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
             hours = Hours(
                 id=id,
                 user_id=existing_hours.user_id,
-                task_id=data.task_id,
+                task_id=existing_hours.task_id,
                 minutes=data.minutes,
                 day=data.day,
+                note=data.note
             )
 
-            self.uow.hours_repository.update(hours)
-
-            updated_hours = self.uow.hours_repository.find_by_id(hours.id)
+            #self.uow.hours_repository.update(hours)
+            self.uow.hours_repository.delete_by_id(id)
+            self.uow.hours_repository.create(hours)
 
             self.uow.commit()
+
+            updated_hours = self.uow.hours_repository.find_by_id(hours.id)
         except:
             self.uow.rollback()
             raise

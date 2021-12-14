@@ -8,7 +8,7 @@ from app.infrastructure.hours import HoursQueryServiceImpl
 from app.usecase.hours import HoursReadModel, HoursQueryUseCaseImpl
 
 
-class TestBookQueryUseCase:
+class TestHoursQueryUseCase:
     def test_fetch_course_by_id_should_return_course(self):
 
         session = MagicMock()

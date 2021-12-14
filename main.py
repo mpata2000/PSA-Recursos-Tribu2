@@ -39,7 +39,7 @@ from app.usecase.hours import (
     HoursQueryUseCase,
     HoursQueryUseCaseImpl,
     HoursReadModel,
-    HoursUpdateModel,
+    HoursPutModel,
 )
 from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
 from app.usecase.resources.resources_query_model import PaginatedResourcesReadModel
@@ -54,6 +54,7 @@ API de recursos de PSA para la Tribu 2 por el Squad 11
 
 - Date in requests and responses will be represented as a `str` in `ISO 8601` format, like: `2008-09-15`.
 - You can not create a new hour by the same user in the same day at the same task twice, you have to update it
+- On put tou can only change the date,minutes and note of the Hours created
 
 """
 
@@ -143,7 +144,7 @@ async def get_hours(
     day: Optional[date] = None,
     user_id: Optional[str] = None,
     task_id: Optional[str] = None,
-    minutes: Optional[str] = None,
+    minutes: Optional[int] = None,
     limit: int = 50,
     offset: int = 0,
     hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
@@ -171,7 +172,7 @@ async def get_hours(
     return PaginatedHoursReadModel(hours=hours, count=count)
 
 
-@app.patch(
+@app.put(
     "/hours/{id}",
     response_model=HoursReadModel,
     status_code=status.HTTP_202_ACCEPTED,
@@ -182,13 +183,13 @@ async def get_hours(
     },
     tags=["hours"],
 )
-async def update_hours(
+async def put_hours(
     id: str,
-    data: HoursUpdateModel,
+    data: HoursPutModel,
     hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
-        updated_hours = hours_command_usecase.update_hours(id, data)
+        updated_hours = hours_command_usecase.put_hours(id, data)
     except HoursNotFoundErrorInDate as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -15,14 +15,6 @@ class HoursRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def find_by_day(self, day: date) -> Optional[Hours]:
-        raise NotImplementedError
-
-    @abstractmethod
-    def update(self, hour: Hours) -> Optional[Hours]:
-        raise NotImplementedError
-
-    @abstractmethod
     def delete_by_id(self, id: str):
         raise NotImplementedError
 
