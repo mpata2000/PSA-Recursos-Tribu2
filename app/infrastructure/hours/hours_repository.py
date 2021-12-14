@@ -1,10 +1,9 @@
-from datetime import date
 from typing import Optional
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
-from app.domain.hours import Hours, HoursNotFoundError, HoursRepository
+from app.domain.hours import Hours, HoursRepository
 from app.usecase.hours import HoursCommandUseCaseUnitOfWork
 
 from .hours_dto import HoursDTO
@@ -24,31 +23,10 @@ class HoursRepositoryImpl(HoursRepository):
 
         return hours_dto.to_entity()
 
-    def find_by_day(self, day: date) -> Optional[Hours]:
-        try:
-            hours_dto = self.session.query(HoursDTO).filter_by(day=day).one()
-        except NoResultFound:
-            return None
-        except:
-            raise
-
-        return hours_dto.to_entity()
-
     def create(self, hours: Hours):
         hours_dto = HoursDTO.from_entity(hours)
         try:
             self.session.add(hours_dto)
-        except:
-            raise
-
-    def update(self, hours: Hours):
-        hours_dto = HoursDTO.from_entity(hours)
-        try:
-            _hours = self.session.query(HoursDTO).filter_by(id=hours_dto.id).one()
-            if hours_dto.day:
-                _hours.day = hours_dto.day
-            if hours_dto.minutes is not None:
-                _hours.minutes = hours_dto.minutes
         except:
             raise
 
@@ -61,14 +39,17 @@ class HoursRepositoryImpl(HoursRepository):
 
     def find_existing_hours(self, day, user_id, task_id) -> Optional[Hours]:
         try:
-            hours_dto = self.session.query(HoursDTO).filter_by(day=day, user_id=user_id, task_id=task_id).one()
+            hours_dto = self.session.query(HoursDTO).filter_by(
+                day=day,
+                user_id=user_id,
+                task_id=task_id
+            ).one()
         except NoResultFound:
             return None
         except:
             raise
 
         return hours_dto.to_entity()
-
 
 
 class HoursCommandUseCaseUnitOfWorkImpl(HoursCommandUseCaseUnitOfWork):
@@ -88,5 +69,3 @@ class HoursCommandUseCaseUnitOfWorkImpl(HoursCommandUseCaseUnitOfWork):
 
     def rollback(self):
         self.session.rollback()
-
-

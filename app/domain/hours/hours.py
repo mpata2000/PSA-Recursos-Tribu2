@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from datetime import date
 
 
@@ -17,7 +17,7 @@ class Hours:
         self.task_id: str = task_id
         self.day: date = day
         self.minutes: int = minutes
-        self.note: str = note
+        self.note: Optional[str] = note
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, Hours):

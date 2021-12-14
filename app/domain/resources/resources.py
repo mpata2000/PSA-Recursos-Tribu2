@@ -12,6 +12,6 @@ class Resources:
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, Resources):
-            return self.id == o.id
+            return self.legajo == o.legajo
 
         return False

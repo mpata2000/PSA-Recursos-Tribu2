@@ -7,17 +7,12 @@ from app.domain.hours import (
 )
 
 
-
 class ErrorMessageHoursNotFound(BaseModel):
     detail: str = Field(example=HoursNotFoundError.message)
 
 
 class ErrorMessageHoursDayAlreadyExists(BaseModel):
     detail: str = Field(example=HoursDayAlreadyExistsError.message)
-
-
-class ErrorMessageHoursNotFound(BaseModel):
-    detail: str = Field(example=HoursNotFoundError.message)
 
 
 class ErrorMessageHoursNotValidDate(BaseModel):

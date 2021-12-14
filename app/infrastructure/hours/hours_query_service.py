@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional, Tuple
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -24,13 +25,13 @@ class HoursQueryServiceImpl(HoursQueryService):
         return hours_dto.to_read_model()
 
     def find_all(
-        self, limit: int = 100, offset: int = 0
+            self, limit: int = 100, offset: int = 0
     ) -> Tuple[List[HoursReadModel], int]:
         try:
             hours_dtos = (
                 self.session.query(HoursDTO)
-                .slice(limit * offset, limit * (offset + 1))
-                .all()
+                    .slice(limit * offset, limit * (offset + 1))
+                    .all()
             )
         except:
             raise HoursNotFoundError
@@ -41,14 +42,14 @@ class HoursQueryServiceImpl(HoursQueryService):
         )
 
     def find_by_filters(
-        self,
-        ids: Optional[List[str]],
-        day: Optional[str],
-        user_id: Optional[str],
-        task_id: Optional[str],
-        minutes: Optional[int],
-        limit: int = 100,
-        offset: int = 0,
+            self,
+            ids: Optional[List[str]],
+            day: Optional[date],
+            user_id: Optional[str],
+            task_id: Optional[str],
+            minutes: Optional[int],
+            limit: int = 100,
+            offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
         try:
             hours_q = self.session.query(HoursDTO)
@@ -66,9 +67,10 @@ class HoursQueryServiceImpl(HoursQueryService):
 
             hours_dtos = hours_q.slice(limit * offset, limit * (offset + 1)).all()
         except:
-            raise 
+            raise
 
         return (
             list(map(lambda hours_dto: hours_dto.to_read_model(), hours_dtos)),
             hours_q.count(),
         )
+#Fix lint error

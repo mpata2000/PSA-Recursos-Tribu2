@@ -1,8 +1,7 @@
-import ast
 import json
 import logging
-import os
-from datetime import datetime, date
+
+from datetime import date
 from logging import config
 from typing import Iterator, List, Optional
 
@@ -10,13 +9,11 @@ import requests
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from sqlalchemy.orm.session import Session
 from starlette.middleware.cors import CORSMiddleware
-from starlette.requests import Request
 
 from app.domain.hours import (
     HoursDayAlreadyExistsError,
     HoursNotFoundError,
     HoursRepository,
-    HoursNotFoundError,
 )
 from app.infrastructure.database import create_tables, SessionLocal
 
@@ -25,7 +22,6 @@ from app.infrastructure.hours import (
     HoursQueryServiceImpl,
     HoursRepositoryImpl,
 )
-
 
 from app.presentation.schema.hours.hours_error_message import (
     ErrorMessageHoursDayAlreadyExists,
@@ -41,7 +37,7 @@ from app.usecase.hours import (
     HoursQueryUseCase,
     HoursQueryUseCaseImpl,
     HoursReadModel,
-    HoursUpdateModel,
+    HoursPutModel,
 )
 from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
 from app.usecase.resources.resources_query_model import PaginatedResourcesReadModel
@@ -56,6 +52,7 @@ API de recursos de PSA para la Tribu 2 por el Squad 11
 
 - Date in requests and responses will be represented as a `str` in `ISO 8601` format, like: `2008-09-15`.
 - You can not create a new hour by the same user in the same day at the same task twice, you have to update it
+- On put tou can only change the date,minutes and note of the Hours created
 
 """
 
@@ -90,7 +87,7 @@ def hours_query_usecase(session: Session = Depends(get_session)) -> HoursQueryUs
 
 
 def hours_command_usecase(
-    session: Session = Depends(get_session),
+        session: Session = Depends(get_session),
 ) -> HoursCommandUseCase:
     hours_repository: HoursRepository = HoursRepositoryImpl(session)
     uow: HoursCommandUseCaseUnitOfWork = HoursCommandUseCaseUnitOfWorkImpl(
@@ -114,10 +111,9 @@ def hours_command_usecase(
     tags=["hours"],
 )
 async def create_hours(
-    data: HoursCreateModel,
-    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
+        data: HoursCreateModel,
+        hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
-
     try:
         hours = hours_command_usecase.create_hours(data)
     except HoursDayAlreadyExistsError as e:
@@ -141,14 +137,14 @@ async def create_hours(
     tags=["hours"],
 )
 async def get_hours(
-    ids: Optional[List[str]] = Query(None),
-    day: Optional[date] = None,
-    user_id: Optional[str] = None,
-    task_id: Optional[str] = None,
-    minutes: Optional[str] = None,
-    limit: int = 50,
-    offset: int = 0,
-    hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
+        ids: Optional[List[str]] = Query(None),
+        day: Optional[date] = None,
+        user_id: Optional[str] = None,
+        task_id: Optional[str] = None,
+        minutes: Optional[int] = None,
+        limit: int = 50,
+        offset: int = 0,
+        hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
 ):
     try:
         hours, count = hours_query_usecase.fetch_hours_by_filters(
@@ -173,7 +169,7 @@ async def get_hours(
     return PaginatedHoursReadModel(hours=hours, count=count)
 
 
-@app.patch(
+@app.put(
     "/hours/{id}",
     response_model=HoursReadModel,
     status_code=status.HTTP_202_ACCEPTED,
@@ -184,14 +180,13 @@ async def get_hours(
     },
     tags=["hours"],
 )
-async def update_hours(
-    id: str,
-    data: HoursUpdateModel,
-    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
-    query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
+async def put_hours(
+        id: str,
+        data: HoursPutModel,
+        hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
-        updated_hours = hours_command_usecase.update_hours(id, data)
+        updated_hours = hours_command_usecase.put_hours(id, data)
     except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -218,9 +213,8 @@ async def update_hours(
     tags=["hours"],
 )
 async def delete_hours(
-    id: str,
-    hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
-    query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
+        id: str,
+        hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
         deleted_hour = hours_command_usecase.delete_hours_by_id(id)
@@ -237,6 +231,7 @@ async def delete_hours(
 
     return deleted_hour
 
+
 @app.get(
     "/resources",
     response_model=PaginatedResourcesReadModel,
@@ -249,6 +244,13 @@ async def delete_hours(
     tags=["resources"],
 )
 async def get_resources():
-    data = json.loads(requests.get("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos").text)
+    data = json.loads(
+        requests.get(
+            "https://anypoint.mulesoft.com/"
+            "mocking/api/v1/sources/exchange/assets/"
+            "754f50e8-20d8-4223-bbdc-56d50131d0ae/"
+            "recursos-psa/1.0.0/m/api/recursos"
+        ).text
+    )
 
     return PaginatedResourcesReadModel(resources=data, count=len(data))
