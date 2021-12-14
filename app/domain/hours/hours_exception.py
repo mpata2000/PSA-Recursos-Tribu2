@@ -1,10 +1,3 @@
-class HoursNotFoundErrorInDate(Exception):
-    message = "The Hours for the day you specified do not exist."
-
-    def __str__(self):
-        return HoursNotFoundErrorInDate.message
-
-
 class HoursDayAlreadyExistsError(Exception):
     message = "Hours for the day you specified already exist."
 

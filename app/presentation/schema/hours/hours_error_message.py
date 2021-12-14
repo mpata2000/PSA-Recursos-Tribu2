@@ -2,11 +2,9 @@ from pydantic import BaseModel, Field
 
 from app.domain.hours import (
     HoursDayAlreadyExistsError,
-    HoursNotFoundErrorInDate,
     HoursNotFoundError,
     HoursNotValidDateError,
 )
-
 
 
 class ErrorMessageHoursNotFound(BaseModel):
@@ -15,10 +13,6 @@ class ErrorMessageHoursNotFound(BaseModel):
 
 class ErrorMessageHoursDayAlreadyExists(BaseModel):
     detail: str = Field(example=HoursDayAlreadyExistsError.message)
-
-
-class ErrorMessageHoursNotFoundInDate(BaseModel):
-    detail: str = Field(example=HoursNotFoundErrorInDate.message)
 
 
 class ErrorMessageHoursNotValidDate(BaseModel):

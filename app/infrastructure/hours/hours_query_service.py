@@ -6,7 +6,7 @@ from sqlalchemy.orm.session import Session
 
 from app.usecase.hours import HoursQueryService, HoursReadModel
 
-from ...domain.hours import HoursNotFoundErrorInDate
+from ...domain.hours import HoursNotFoundError
 from .hours_dto import HoursDTO
 
 
@@ -34,7 +34,7 @@ class HoursQueryServiceImpl(HoursQueryService):
                 .all()
             )
         except:
-            raise HoursNotFoundErrorInDate
+            raise HoursNotFoundError
 
         return (
             list(map(lambda hours_dto: hours_dto.to_read_model(), hours_dtos)),

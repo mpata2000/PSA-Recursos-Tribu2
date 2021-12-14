@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
-from app.domain.hours import Hours, HoursNotFoundErrorInDate, HoursNotFoundError, HoursRepository
+from app.domain.hours import Hours, HoursNotFoundError, HoursRepository
 from app.usecase.hours import HoursCommandUseCaseUnitOfWork
 
 from .hours_dto import HoursDTO
@@ -49,7 +49,6 @@ class HoursRepositoryImpl(HoursRepository):
         return hours_dto.to_entity()
 
 
-
 class HoursCommandUseCaseUnitOfWorkImpl(HoursCommandUseCaseUnitOfWork):
     def __init__(
         self,
@@ -67,5 +66,3 @@ class HoursCommandUseCaseUnitOfWorkImpl(HoursCommandUseCaseUnitOfWork):
 
     def rollback(self):
         self.session.rollback()
-
-

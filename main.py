@@ -14,7 +14,6 @@ from app.domain.hours import (
     HoursDayAlreadyExistsError,
     HoursNotFoundError,
     HoursRepository,
-    HoursNotFoundErrorInDate,
 )
 from app.infrastructure.database import create_tables, SessionLocal
 
@@ -190,7 +189,7 @@ async def put_hours(
 ):
     try:
         updated_hours = hours_command_usecase.put_hours(id, data)
-    except HoursNotFoundErrorInDate as e:
+    except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,
@@ -221,7 +220,7 @@ async def delete_hours(
 ):
     try:
         deleted_hour = hours_command_usecase.delete_hours_by_id(id)
-    except HoursNotFoundErrorInDate as e:
+    except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=e.message,

@@ -6,7 +6,6 @@ from sqlalchemy.exc import NoResultFound
 
 from app.domain.hours import HoursNotFoundError, Hours, HoursDayAlreadyExistsError
 from app.infrastructure.hours import HoursDTO, HoursRepositoryImpl
-from app.presentation.schema.hours.hours_error_message import ErrorMessageHoursDayAlreadyExists
 
 hours_1 = Hours(
     id="QK6qXDKUYf3p8x7Vb4SNas",

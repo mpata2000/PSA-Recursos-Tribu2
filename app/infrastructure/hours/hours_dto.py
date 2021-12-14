@@ -1,9 +1,7 @@
 from datetime import datetime, date
 from typing import Union
-from app.domain.hours import Hours
 
 from sqlalchemy import Column, Float, String, Date
-from sqlalchemy.orm import relationship
 
 from app.domain.hours import Hours
 from app.infrastructure.database import Base
@@ -12,9 +10,6 @@ from app.usecase.hours import HoursReadModel
 
 def unixtimestamp() -> int:
     return int(datetime.now().timestamp() * 1000)
-
-
-
 
 
 class HoursDTO(Base):

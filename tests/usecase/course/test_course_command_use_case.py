@@ -1,10 +1,10 @@
-from datetime import datetime
+
 from unittest.mock import MagicMock, Mock
 
 import pytest
 
 from app.domain.hours import HoursNotFoundError, Hours, HoursDayAlreadyExistsError
-from app.infrastructure.hours import HoursDTO, HoursCommandUseCaseUnitOfWorkImpl, hours_repository, HoursRepositoryImpl
+from app.infrastructure.hours import HoursDTO, HoursCommandUseCaseUnitOfWorkImpl, HoursRepositoryImpl
 from app.usecase.hours import HoursCommandUseCaseImpl
 
 hours_1 = Hours(
