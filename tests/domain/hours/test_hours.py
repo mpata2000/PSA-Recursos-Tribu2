@@ -80,14 +80,14 @@ class TestHours:
         ],
     )
     def test_price_setter_should_update_value(self, price):
-        course = Course(
+        hours = Course(
             id="course_01",
             name="C Programming For Beginners - Master the C Language",
             categories="Programming",
             price=10,
         )
 
-        course.price = price
+        hours.price = price
 
-        assert course.price == price
+        assert hours.price == price
 '''

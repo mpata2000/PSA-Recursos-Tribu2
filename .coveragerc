@@ -1,2 +1,12 @@
 [run]
-omit = main.py
+omit =
+    main.py
+    ./venv/*
+    *tests*
+    *__init__.py
+
+[report]
+omit =
+    ./venv/*
+    *tests*
+    *__init__.py
