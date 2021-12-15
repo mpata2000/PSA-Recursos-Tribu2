@@ -1,0 +1,5 @@
+ignore:
+  - "**/tests/*"
+  - "**/venv/*"
+  - "**/main.py"
+  - "**/database.py"
