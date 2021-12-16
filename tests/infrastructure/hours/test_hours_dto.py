@@ -10,7 +10,9 @@ class TestHoursDTO:
             user_id="106226",
             task_id="P03",
             day="2020-10-10",
-            minutes=60,
+            hours=2,
+            minutes=35,
+            seconds=10,
             note="Un buen trabajo",
         )
 
@@ -20,7 +22,7 @@ class TestHoursDTO:
         assert hours.user_id == "106226"
         assert hours.task_id == "P03"
         assert hours.day.strftime("%Y-%m-%d") == "2020-10-10"
-        assert hours.minutes == 60
+        assert hours.minutes == 35
         assert hours.note == "Un buen trabajo"
 
     def test_to_entity_should_create_entity_instance(self):
@@ -29,7 +31,9 @@ class TestHoursDTO:
             user_id="106226",
             task_id="P03",
             day="2020-10-10",
-            minutes=60,
+            hours=2,
+            minutes=35,
+            seconds=10,
             note="Un buen trabajo",
         )
 
@@ -39,7 +43,7 @@ class TestHoursDTO:
         assert hours.user_id == "106226"
         assert hours.task_id == "P03"
         assert hours.day == "2020-10-10"
-        assert hours.minutes == 60
+        assert hours.minutes == 35
         assert hours.note == "Un buen trabajo"
 
     def test_from_entity_should_create_dto_instance(self):
@@ -48,7 +52,9 @@ class TestHoursDTO:
             user_id="106226",
             task_id="P03",
             day="2020-10-10",
-            minutes=60,
+            hours=2,
+            minutes=35,
+            seconds=10,
             note="Un buen trabajo",
         )
 
@@ -58,5 +64,5 @@ class TestHoursDTO:
         assert hours_dto.user_id == "106226"
         assert hours_dto.task_id == "P03"
         assert hours_dto.day == "2020-10-10"
-        assert hours_dto.minutes == 60
+        assert hours_dto.minutes == 35
         assert hours_dto.note == "Un buen trabajo"

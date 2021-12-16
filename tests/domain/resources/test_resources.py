@@ -15,7 +15,7 @@ class TestResources:
         assert resources.Nombre == "Martin"
         assert resources.Apellido == "Pata"
 
-    def test_course_entity_should_be_identified_by_id(self):
+    def test_resource_entity_should_be_identified_by_id(self):
         resources1 = Resources(
             legajo="106226",
             Nombre="Martin",

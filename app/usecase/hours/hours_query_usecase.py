@@ -27,7 +27,6 @@ class HoursQueryUseCase(ABC):
         day: Optional[date],
         user_id: Optional[str],
         task_id: Optional[str],
-        minutes: Optional[int],
         limit: int = 100,
         offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
@@ -67,7 +66,6 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
         day: Optional[date],
         user_id: Optional[str],
         task_id: Optional[str],
-        minutes: Optional[int],
         limit: int = 100,
         offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
@@ -77,7 +75,6 @@ class HoursQueryUseCaseImpl(HoursQueryUseCase):
                 day=day,
                 user_id=user_id,
                 task_id=task_id,
-                minutes=minutes,
                 limit=limit,
                 offset=offset
             )

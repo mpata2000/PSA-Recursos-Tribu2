@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from typing import Union
 
-from sqlalchemy import Column, Float, String, Date
+from sqlalchemy import Column, String, Date, Integer
 
 from app.domain.hours import Hours
 from app.infrastructure.database import Base
@@ -19,7 +19,9 @@ class HoursDTO(Base):
     user_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     task_id: Union[str, Column] = Column(String, nullable=False, autoincrement=False)
     day: Union[date, Column] = Column(Date, nullable=False, autoincrement=False)
-    minutes: Union[int, Column] = Column(Float, nullable=False)
+    hours: Union[int, Column] = Column(Integer, nullable=False)
+    minutes: Union[int, Column] = Column(Integer, nullable=False)
+    seconds: Union[int, Column] = Column(Integer, nullable=False)
     note: Union[str, Column] = Column(String, nullable=True)
 
     def to_entity(self) -> Hours:
@@ -28,7 +30,9 @@ class HoursDTO(Base):
             user_id=self.user_id,
             task_id=self.task_id,
             day=self.day,
+            hours=self.hours,
             minutes=self.minutes,
+            seconds=self.seconds,
             note=self.note
         )
 
@@ -38,7 +42,9 @@ class HoursDTO(Base):
             user_id=self.user_id,
             task_id=self.task_id,
             day=self.day,
+            hours=self.hours,
             minutes=self.minutes,
+            seconds=self.seconds,
             note=self.note
         )
 
@@ -49,6 +55,8 @@ class HoursDTO(Base):
             user_id=hours.user_id,
             task_id=hours.task_id,
             day=hours.day,
+            hours=hours.hours,
             minutes=hours.minutes,
+            seconds=hours.seconds,
             note=hours.note
         )

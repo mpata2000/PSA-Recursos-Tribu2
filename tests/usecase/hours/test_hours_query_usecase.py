@@ -12,7 +12,9 @@ hours_read_1 = HoursReadModel(
     user_id="106226",
     task_id="P03",
     day="2020-10-10",
-    minutes=60,
+    hours=2,
+    minutes=35,
+    seconds=10,
     note="Un buen trabajo",
 )
 
@@ -21,7 +23,9 @@ hours_read_2 = HoursReadModel(
     user_id="106000",
     task_id="P03",
     day="2020-10-10",
-    minutes=70,
+    hours=2,
+    minutes=40,
+    seconds=10,
     note="Un buen trabajo",
 )
 
@@ -30,12 +34,14 @@ hours_read_3 = HoursReadModel(
     user_id="106226",
     task_id="P04",
     day="2020-12-12",
-    minutes=80,
+    hours=2,
+    minutes=50,
+    seconds=10,
     note="Un buen trabajo",
 )
 
 class TestHoursQueryUseCase:
-    def test_fetch_course_by_id_should_return_hours(self):
+    def test_fetch_hours_by_id_should_return_hours(self):
 
         session = MagicMock()
         hours_query_service = HoursQueryServiceImpl(session)
@@ -76,9 +82,9 @@ class TestHoursQueryUseCase:
 
         assert len(courses) == 2
         assert courses[0].user_id == "106226"
-        assert courses[0].minutes == 60
+        assert courses[0].minutes == 35
         assert courses[1].user_id == "106000"
-        assert courses[1].minutes == 70
+        assert courses[1].minutes == 40
 
     def test_find_by_filter_hours_with_no_filter_should_return_hours(self):
         session = MagicMock()
@@ -96,7 +102,6 @@ class TestHoursQueryUseCase:
             day=None,
             user_id=None,
             task_id=None,
-            minutes=None
         )
 
         hours_query_service.find_by_filters.assert_called_with(
@@ -104,15 +109,14 @@ class TestHoursQueryUseCase:
             day=None,
             user_id=None,
             task_id=None,
-            minutes=None,
             limit=100,
             offset=0
         )
         assert len(courses) == 2
         assert courses[0].user_id == "106226"
-        assert courses[0].minutes == 60
+        assert courses[0].minutes == 35
         assert courses[1].user_id == "106000"
-        assert courses[1].minutes == 70
+        assert courses[1].minutes == 40
 
     def test_find_by_filter_hours_filter_by_user_id_should_return_hours(self):
         session = MagicMock()
@@ -130,7 +134,6 @@ class TestHoursQueryUseCase:
             day=None,
             user_id="106226",
             task_id=None,
-            minutes=None
         )
 
         hours_query_service.find_by_filters.assert_called_with(
@@ -138,15 +141,14 @@ class TestHoursQueryUseCase:
             day=None,
             user_id="106226",
             task_id=None,
-            minutes=None,
             limit=100,
             offset=0
         )
         assert len(courses) == 2
         assert courses[0].user_id == "106226"
-        assert courses[0].minutes == 60
+        assert courses[0].minutes == 35
         assert courses[1].user_id == "106226"
-        assert courses[1].minutes == 80
+        assert courses[1].minutes == 50
 
     def test_find_by_filter_hours_filter_by_task_id_should_return_hours(self):
         session = MagicMock()
@@ -164,7 +166,6 @@ class TestHoursQueryUseCase:
             day=None,
             user_id=None,
             task_id="P03",
-            minutes=None
         )
 
         hours_query_service.find_by_filters.assert_called_with(
@@ -172,7 +173,6 @@ class TestHoursQueryUseCase:
             day=None,
             user_id=None,
             task_id="P03",
-            minutes=None,
             limit=100,
             offset=0
         )
@@ -180,10 +180,10 @@ class TestHoursQueryUseCase:
         assert len(hours) == 2
         assert hours[0].user_id == "106226"
         assert hours[0].task_id == "P03"
-        assert hours[0].minutes == 60
+        assert hours[0].minutes == 35
         assert hours[1].user_id == "106000"
         assert hours[1].task_id == "P03"
-        assert hours[1].minutes == 70
+        assert hours[1].minutes == 40
 
     def test_find_by_filter_hours_filter_by_day_should_return_hours(self):
         session = MagicMock()
@@ -201,7 +201,6 @@ class TestHoursQueryUseCase:
             day="2020-10-10",
             user_id=None,
             task_id=None,
-            minutes=None
         )
 
         hours_query_service.find_by_filters.assert_called_with(
@@ -209,7 +208,6 @@ class TestHoursQueryUseCase:
             day="2020-10-10",
             user_id=None,
             task_id=None,
-            minutes=None,
             limit=100,
             offset=0
         )
@@ -217,42 +215,10 @@ class TestHoursQueryUseCase:
         assert len(hours) == 2
         assert hours[0].user_id == "106226"
         assert hours[0].task_id == "P03"
-        assert hours[0].minutes == 60
+        assert hours[0].minutes == 35
         assert hours[1].user_id == "106000"
         assert hours[1].task_id == "P03"
-        assert hours[1].minutes == 70
-
-    def test_find_by_filter_hours_filter_by_minutes_should_return_hours(self):
-        session = MagicMock()
-        hours_query_service = HoursQueryServiceImpl(session)
-        hours_query_service.find_by_filters = Mock(
-            return_value=([hours_read_3], 1)
-        )
-
-        hours_query_usecase = HoursQueryUseCaseImpl(hours_query_service)
-        hours, count = hours_query_usecase.fetch_hours_by_filters(
-            ids=None,
-            day=None,
-            user_id=None,
-            task_id=None,
-            minutes=80
-        )
-
-        hours_query_service.find_by_filters.assert_called_with(
-            ids=None,
-            day=None,
-            user_id=None,
-            task_id=None,
-            minutes=80,
-            limit=100,
-            offset=0
-        )
-
-        assert len(hours) == 1
-        assert count == 1
-        assert hours[0].user_id == "106226"
-        assert hours[0].task_id == "P04"
-        assert hours[0].minutes == 80
+        assert hours[1].minutes == 40
 
     def test_find_by_filter_hours_with_all_filters_should_return_hours(self):
         session = MagicMock()
@@ -267,7 +233,6 @@ class TestHoursQueryUseCase:
             user_id="106226",
             task_id="P04",
             day="2020-12-12",
-            minutes=80,
         )
 
         hours_query_service.find_by_filters.assert_called_with(
@@ -275,7 +240,6 @@ class TestHoursQueryUseCase:
             user_id="106226",
             task_id="P04",
             day="2020-12-12",
-            minutes=80,
             limit=100,
             offset=0
         )
@@ -284,4 +248,4 @@ class TestHoursQueryUseCase:
         assert count == 1
         assert hours[0].user_id == "106226"
         assert hours[0].task_id == "P04"
-        assert hours[0].minutes == 80
+        assert hours[0].minutes == 50
