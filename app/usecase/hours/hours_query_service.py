@@ -23,7 +23,6 @@ class HoursQueryService(ABC):
         day: Optional[date],
         user_id: Optional[str],
         task_id: Optional[str],
-        minutes: Optional[int],
         limit: int = 100,
         offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:

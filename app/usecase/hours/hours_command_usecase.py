@@ -65,7 +65,9 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
                 user_id=data.user_id,
                 task_id=data.task_id,
                 day=data.day,
+                hours=data.hours,
                 minutes=data.minutes,
+                seconds=data.seconds,
                 note=data.note
             )
 
@@ -77,6 +79,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
 
             if existing_hours is not None:
                 raise HoursDayAlreadyExistsError
+
             self.uow.hours_repository.create(hours)
             self.uow.commit()
 
@@ -99,7 +102,9 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
                 id=id,
                 user_id=existing_hours.user_id,
                 task_id=existing_hours.task_id,
+                hours=data.hours,
                 minutes=data.minutes,
+                seconds=data.seconds,
                 day=data.day,
                 note=data.note
             )

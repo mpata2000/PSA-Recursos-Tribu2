@@ -47,7 +47,6 @@ class HoursQueryServiceImpl(HoursQueryService):
             day: Optional[date],
             user_id: Optional[str],
             task_id: Optional[str],
-            minutes: Optional[int],
             limit: int = 100,
             offset: int = 0,
     ) -> Tuple[List[HoursReadModel], int]:
@@ -62,8 +61,6 @@ class HoursQueryServiceImpl(HoursQueryService):
                 hours_q = hours_q.filter_by(user_id=user_id)
             if task_id:
                 hours_q = hours_q.filter_by(task_id=task_id)
-            if minutes:
-                hours_q = hours_q.filter_by(minutes=minutes)
 
             hours_dtos = hours_q.slice(limit * offset, limit * (offset + 1)).all()
         except:

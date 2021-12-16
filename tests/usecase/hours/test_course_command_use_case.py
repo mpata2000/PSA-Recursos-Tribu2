@@ -12,7 +12,9 @@ hours_1 = Hours(
     user_id="106",
     task_id="P03",
     day="2020-10-10",
-    minutes=60,
+    hours=2,
+    minutes=35,
+    seconds=10,
     note="Un buen trabajo",
 )
 
@@ -21,7 +23,9 @@ hours_dto_1 = HoursDTO(
     user_id="106226",
     task_id="P3",
     day="2020-10-10",
-    minutes=60,
+    hours=2,
+    minutes=35,
+    seconds=10,
     note="Un buen trabajo",
 )
 

@@ -141,7 +141,6 @@ async def get_hours(
         day: Optional[date] = None,
         user_id: Optional[str] = None,
         task_id: Optional[str] = None,
-        minutes: Optional[int] = None,
         limit: int = 50,
         offset: int = 0,
         hours_query_usecase: HoursQueryUseCase = Depends(hours_query_usecase),
@@ -152,7 +151,6 @@ async def get_hours(
             day=day,
             user_id=user_id,
             task_id=task_id,
-            minutes=minutes,
             limit=limit,
             offset=offset,
         )
