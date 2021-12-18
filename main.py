@@ -52,7 +52,6 @@ API de recursos de PSA para la Tribu 2 por el Squad 11
 
 - Date in requests and responses will be represented as a `str` in `ISO 8601` format, like: `2008-09-15`.
 - You can not create a new hour by the same user in the same day at the same task twice, you have to update it
-- On put tou can only change the date,minutes and note of the Hours created
 
 """
 
