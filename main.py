@@ -37,7 +37,7 @@ from app.usecase.hours import (
     HoursQueryUseCase,
     HoursQueryUseCaseImpl,
     HoursReadModel,
-    HoursPutModel,
+    HoursPatchModel,
 )
 from app.usecase.hours.hours_query_model import PaginatedHoursReadModel
 from app.usecase.resources.resources_query_model import PaginatedResourcesReadModel
@@ -167,7 +167,7 @@ async def get_hours(
     return PaginatedHoursReadModel(hours=hours, count=count)
 
 
-@app.put(
+@app.patch(
     "/hours/{id}",
     response_model=HoursReadModel,
     status_code=status.HTTP_202_ACCEPTED,
@@ -180,11 +180,11 @@ async def get_hours(
 )
 async def put_hours(
         id: str,
-        data: HoursPutModel,
+        data: HoursPatchModel,
         hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
 ):
     try:
-        updated_hours = hours_command_usecase.put_hours(id, data)
+        updated_hours = hours_command_usecase.patch_hours(id, data)
     except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

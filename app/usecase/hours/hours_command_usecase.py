@@ -9,7 +9,7 @@ from app.domain.hours import (
     HoursRepository,
     HoursNotFoundError,
 )
-from .hours_command_model import HoursCreateModel, HoursPutModel
+from .hours_command_model import HoursCreateModel, HoursPatchModel
 from .hours_query_model import HoursReadModel
 
 
@@ -38,8 +38,8 @@ class HoursCommandUseCase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def put_hours(
-        self, id: str, data: HoursPutModel
+    def patch_hours(
+        self, id: str, data: HoursPatchModel
     ) -> Optional[HoursReadModel]:
         raise NotImplementedError
 
@@ -90,24 +90,28 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
 
         return HoursReadModel.from_entity(cast(Hours, created_hours))
 
-    def put_hours(
-        self, id: str, data: HoursPutModel
+    def patch_hours(
+        self, id: str, data: HoursPatchModel
     ) -> Optional[HoursReadModel]:
         try:
-            existing_hours = self.uow.hours_repository.find_by_id(id)
-            if existing_hours is None:
+            hours = self.uow.hours_repository.find_by_id(id)
+            if hours is None:
                 raise HoursNotFoundError
 
-            hours = Hours(
-                id=id,
-                user_id=existing_hours.user_id,
-                task_id=existing_hours.task_id,
-                hours=data.hours,
-                minutes=data.minutes,
-                seconds=data.seconds,
-                day=data.day,
-                note=data.note
-            )
+            if data.user_id:
+                hours.user_id = data.user_id
+            if data.hours:
+                hours.task_id = data.task_id
+            if data.hours:
+                hours.hours = data.hours
+            if data.minutes:
+                hours.minutes = data.minutes
+            if data.seconds:
+                hours.seconds = data.seconds
+            if data.day:
+                hours.day = data.day
+            if data.note:
+                hours.note = data.note
 
             self.uow.hours_repository.delete_by_id(id)
             self.uow.hours_repository.create(hours)

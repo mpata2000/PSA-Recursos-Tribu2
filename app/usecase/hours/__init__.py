@@ -1,4 +1,4 @@
-from .hours_command_model import HoursCreateModel, HoursPutModel
+from .hours_command_model import HoursCreateModel, HoursPatchModel
 from .hours_command_usecase import (
     HoursCommandUseCase,
     HoursCommandUseCaseImpl,
