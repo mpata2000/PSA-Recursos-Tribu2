@@ -100,7 +100,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
 
             if data.user_id:
                 hours.user_id = data.user_id
-            if data.hours:
+            if data.task_id:
                 hours.task_id = data.task_id
             if data.hours:
                 hours.hours = data.hours
