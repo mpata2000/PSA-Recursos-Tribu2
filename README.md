@@ -18,28 +18,34 @@ Directory structure (based on [Onion Architecture](https://jeffreypalermo.com/20
 ├── main.py
 ├── app
 │   ├── domain
-│   │   └── hours
-│   │       ├── hours.py  # Entity
-│   │       ├── hours_exception.py  # Exception definitions
-│   │       └── hours_repository.py  # Repository interface
+│   │   ├── hours
+│   │   │   ├── hours.py  # Entity
+│   │   │   ├── hours_exception.py  # Exception definitions
+│   │   │   └── hours_repository.py  # Repository interface
+│   │   └── resources
+│   │       ├── resources.py  # Entity
+│   │       └── resources_exception.py  # Exception definitions
 │   ├── infrastructure
-│   │   └── sqlite
-│   │       ├── hours
-│   │       │   ├── hours_dto.py  # DTO using SQLAlchemy
-│   │       │   ├── hours_query_service.py  # Query service implementation
-│   │       │   └── hours_repository.py  # Repository implementation
-│   │       └── database.py
+│   │    ├── hours
+│   │    │   ├── hours_dto.py  # DTO using SQLAlchemy
+│   │    │   ├── hours_query_service.py  # Query service implementation
+│   │    │   └── hours_repository.py  # Repository implementation
+│   │    └── database.py
 │   ├── presentation
 │   │   └── schema
-│   │       └── hours
-│   │           └── hours_error_message.py
+│   │       ├── hours
+│   │       │   └── hours_error_message.py
+│   │       └── resources
+│   │           └── resources_error_message.py
 │   └── usecase
-│       └── hours
-│           ├── hours_command_model.py  # Write models including schemas of the RESTFul API
-│           ├── hours_command_usecase.py
-│           ├── hours_query_model.py  # Read models including schemas
-│           ├── hours_query_service.py  # Query service interface
-│           └── hours_query_usecase.py
+│       ├── hours
+│       │   ├── hours_command_model.py  # Write models including schemas of the RESTFul API
+│       │   ├── hours_command_usecase.py
+│       │   ├── hours_query_model.py  # Read models including schemas
+│       │   ├── hours_query_service.py  # Query service interface
+│       │   └── hours_query_usecase.py
+│       └── resources
+│           └── resources_query_model.py  # Read models including schemas
 └── tests
 ```
 
