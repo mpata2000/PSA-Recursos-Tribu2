@@ -51,9 +51,7 @@ Directory structure (based on [Onion Architecture](https://jeffreypalermo.com/20
 
 ## Run
 ``` bash
-docker-compose build
-
-docker-compose up
+make run
 ```
 
 Access api swagger at: http://127.0.0.1:8000/docs#/
@@ -71,4 +69,18 @@ make fmt
 ## Lint
 ``` bash
 make lint
+```
+
+## Test BDD
+
+Make sure the api is running
+
+``` bash
+make run
+```
+
+and run the test with
+
+``` bash
+make testBDD
 ```
