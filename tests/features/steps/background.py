@@ -8,6 +8,20 @@ import requests
 from behave import *
 
 
+def create_random_hour():
+    test = "test_id:" + "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+
+    hour = {
+        "user_id": test,
+        "task_id": test,
+        "day": datetime.now().strftime("%Y-%m-%d"),
+        "hours": random.randint(0, 23),
+        "minutes": random.randint(0, 59),
+        "seconds": random.randint(0, 59),
+        "note": test
+    }
+    return hour
+
 @given('a running api')
 def step_impl(context):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -21,18 +35,7 @@ def step_impl(context):
     data = json.loads(response.text)
 
     if data["count"] < 1:
-        test = "test_id:" + "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
-
-        hour = {
-            "user_id": test,
-            "task_id": test,
-            "day": datetime.now().strftime("%Y-%m-%d"),
-            "hours": random.randint(0, 23),
-            "minutes": random.randint(0, 23),
-            "seconds": random.randint(0, 23),
-            "note": test
-        }
-
+        hour = create_random_hour()
         response = requests.post("http://127.0.0.1:8000/hours", json=hour)
         context.json = json.loads(response.text)
     else:
