@@ -25,6 +25,22 @@ def step_impl(context, user_id, task_id, hours, minutes, seconds, date, note):
     }
 
 
+@step('it isnt created already with "{user_id}","{task_id}" and "{date}"')
+def step_impl(context, user_id, task_id, date):
+    params = {
+        "user_id": user_id,
+        "task_id": task_id,
+        "day": date
+    }
+
+    context.response = requests.get("http://127.0.0.1:8000/hours", params=params)
+    data = json.loads(context.response.text)
+
+    if data["count"] > 0:
+        url = "http://127.0.0.1:8000/hours/" + data["hours"][0]["id"]
+        requests.delete(url)
+
+
 @when("we request a create hours")
 def step_impl(context):
     context.response = requests.post("http://127.0.0.1:8000/hours", json=context.json_hours_1)
@@ -33,13 +49,34 @@ def step_impl(context):
 @then("a hours is created correctly")
 def step_impl(context):
     assert context.response.status_code == 201
-    assert context.response.json() == context.json_hours_1
+    data = json.loads(context.response.text)
+    assert data["user_id"] == context.json_hours_1["user_id"]
+    assert data["task_id"] == context.json_hours_1["task_id"]
+    assert data["day"] == context.json_hours_1["day"]
 
 
-@step('it isnt created already with "{user_id}","{task_id}" and "{date}"')
+@given('hours with "{user_id}","{task_id}","{hours}","{minutes}","{seconds}" and "{date}"')
+def step_impl(context, user_id, task_id, hours, minutes, seconds, date):
+    context.json_hours_1 = {
+        "user_id": user_id,
+        "task_id": task_id,
+        "day": date,
+        "hours": hours,
+        "minutes": minutes,
+        "seconds": seconds,
+        "note": ""
+    }
+
+
+@then("hours arent created and error 422")
+def step_impl(context):
+    assert context.response.status_code == 422
+
+
+@step('it is created already with "{user_id}","{task_id}" and "{date}"')
 def step_impl(context, user_id, task_id, date):
     params = {
-        "user_id": "xd",
+        "user_id": user_id,
         "task_id": task_id,
         "day": date
     }
@@ -47,6 +84,12 @@ def step_impl(context, user_id, task_id, date):
     context.response = requests.get("http://127.0.0.1:8000/hours", params=params)
     data = json.loads(context.response.text)
 
-    if len(data) > 0:
-        url = "http://127.0.0.1:8000/hours/" + data.id
-        requests.delete(url)
+    if data["count"] == 0:
+        context.response = requests.post("http://127.0.0.1:8000/hours", json=context.json_hours_1)
+        assert context.response.status_code == 201
+
+
+@then("conlifct is thrown")
+def step_impl(context):
+    assert context.response.status_code == 409
+
