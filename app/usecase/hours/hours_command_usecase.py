@@ -123,7 +123,7 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
 
             self.uow.hours_repository.delete_by_id(id)
             self.uow.hours_repository.create(hours)
-
+            self.uow.commit()
             updated_hours = self.uow.hours_repository.find_by_id(hours.id)
         except:
             self.uow.rollback()
