@@ -10,9 +10,9 @@ Feature: patch Hours
     When patch is requested
     Then not found error is returned
 
-  Scenario: patch existing hours only user_id
+  Scenario: patch existing hours only note
     Given an existing hours url id
-      And a patch body with "{"user_id":"test_patch"}"
+      And a patch body with "{"note":"test_patch"}"
     When patch is requested
     Then hours is updated
 

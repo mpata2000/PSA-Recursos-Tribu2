@@ -29,3 +29,4 @@ def step_impl(context):
 def step_impl(context):
     if context.response.status_code == 409:
         context.json_patch["user_id"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        context.response = requests.patch(context.url, json=context.json_patch)
