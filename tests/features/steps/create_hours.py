@@ -1,15 +1,8 @@
 import json
-import socket
+
 
 import requests
 from behave import *
-
-
-
-@given('a running api')
-def step_impl(context):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        assert s.connect_ex(('localhost', 8000)) == 0
 
 
 @given('hours with "{user_id}","{task_id}","{hours}","{minutes}","{seconds}","{date}" and "{note}"')
@@ -92,4 +85,3 @@ def step_impl(context, user_id, task_id, date):
 @then("conlifct is thrown")
 def step_impl(context):
     assert context.response.status_code == 409
-

@@ -15,7 +15,7 @@ update:
 	$(POETRY) update
 	$(POETRY_EXPORT)
 
-test: install
+test:
 	$(PYTEST) -vv
 
 fmt:
@@ -29,7 +29,10 @@ lint:
 build:
 	$ docker-compose build
 
-run:
+run: build
 	$ docker-compose up
+
+testBDD:
+	behave ./tests/features
 
 all: fmt lint test build run

@@ -1,6 +1,17 @@
-# Created by Martin at 19/12/2021
-Feature: # Enter feature name here
-  # Enter feature description here
+Feature: patch Hours
 
-  Scenario: # Enter scenario name here
-    # Enter steps here
+  Background: A running api and database
+    Given a running api
+
+  Scenario: patch not existing hours
+    Given a random hours url id
+      And a patch body with "{}"
+      And id doest return hours
+    When patch is requested
+    Then not found error is returned
+
+  Scenario: patch existing hours
+    Given an existing hours url id
+      And a patch body with "{""}"
+    When patch is requested
+    Then not found error is returned

@@ -1,6 +1,6 @@
 Feature: Create Hours
 
-  Background: some requirement of this test
+  Background: A running api and database
     Given a running api
 
   Scenario: Create hours with all the information
@@ -15,7 +15,7 @@ Feature: Create Hours
     When we request a create hours
     Then a hours is created correctly
 
-  Scenario: Create hours with empty note
+  Scenario: Create hours 2 hours for the same day from same user to the same task
     Given hours with "user_id","task_id","1","1","1" and "2020-10-10"
       And it is created already with "user_id","task_id" and "2020-10-10"
     When we request a create hours

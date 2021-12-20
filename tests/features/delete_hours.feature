@@ -1,6 +1,15 @@
-# Created by Martin at 19/12/2021
-Feature: # Enter feature name here
-  # Enter feature description here
+Feature: Delete Hours
 
-  Scenario: # Enter scenario name here
-    # Enter steps here
+  Background: A running api and database
+    Given a running api
+
+  Scenario: Delete existing hours
+    Given an existing hours url id
+    When delete is requested
+    Then hours are deleted
+
+  Scenario: Delete not existing hours
+    Given a random hours url id
+      And id doest return hours
+    When delete is requested
+    Then not found error is returned
