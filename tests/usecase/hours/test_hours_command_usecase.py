@@ -105,7 +105,7 @@ class TestCourseCommandUseCase:
             session = MagicMock()
             hours_repository = MagicMock()
             hours_repository.find_by_id = Mock(return_value=hours_1)
-            hours_repository.find_existing_hours = Mock(return_value=hours_1)
+            hours_repository.find_existing_hours = Mock(return_value=hours_2)
             uow = HoursCommandUseCaseUnitOfWorkImpl(
                 session=session, hours_repository=hours_repository
             )

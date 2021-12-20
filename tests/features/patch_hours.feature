@@ -18,7 +18,6 @@ Feature: patch Hours
 
   Scenario: patch existing hours all information
     Given an existing hours url id
-      And a patch body with "{"user_id": "1231","task_id": "1","day": "2021-05-25","hours": 3,"minutes": 45,"seconds": 10,"note": "Descripcion"}"
-    When patch is requested
-      And it doesnt conflict
+      And a patch body with "{"user_id": "123312311","task_id": "1123","day": "2021-05-25","hours": 3,"minutes": 45,"seconds": 10,"note": "Descripcion"}"
+    When patch is requested and doesnt conflict
     Then hours is updated
