@@ -62,11 +62,13 @@ make test
 ```
 
 ## Reformat
+
 ``` bash
 make fmt
 ```
 
 ## Lint
+
 ``` bash
 make lint
 ```
