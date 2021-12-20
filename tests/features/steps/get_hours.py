@@ -44,7 +44,7 @@ def step_impl(context):
     data = {
         "ids": context.json["id"]
     }
-    context.response = requests.get("http://127.0.0.1:8000/hours")
+    context.response = requests.get("http://127.0.0.1:8000/hours", params=data)
 
 
 @then("get is succesful and empty")
