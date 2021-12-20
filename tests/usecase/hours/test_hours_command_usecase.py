@@ -90,7 +90,7 @@ class TestCourseCommandUseCase:
             session = MagicMock()
             hours_repository = MagicMock()
             hours_repository.find_by_id = Mock(return_value=hours_1)
-            hours_repository.find_existing_hours = Mock(return_value=hours_2)
+            hours_repository.find_existing_hours = Mock(return_value=None)
             uow = HoursCommandUseCaseUnitOfWorkImpl(
                 session=session, hours_repository=hours_repository
             )
@@ -100,6 +100,20 @@ class TestCourseCommandUseCase:
             )
 
             assert hours.id == hours_1.id
+
+    def test_update_course_should_return_course(self):
+            session = MagicMock()
+            hours_repository = MagicMock()
+            hours_repository.find_by_id = Mock(return_value=hours_1)
+            hours_repository.find_existing_hours = Mock(return_value=hours_1)
+            uow = HoursCommandUseCaseUnitOfWorkImpl(
+                session=session, hours_repository=hours_repository
+            )
+            course_command_usecase = HoursCommandUseCaseImpl(uow=uow)
+
+            with pytest.raises(HoursDayAlreadyExistsError):
+                course_command_usecase.patch_hours(id=hours_1.id, data=hours_1)
+            hours_repository.find_existing_hours.assert_called_with(hours_1.day, hours_1.user_id, hours_1.task_id)
 
     def test_delete_hours_by_id(self):
         session = MagicMock()
