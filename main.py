@@ -177,7 +177,7 @@ async def get_hours(
     },
     tags=["hours"],
 )
-async def put_hours(
+async def patch_hours(
         id: str,
         data: HoursPatchModel,
         hours_command_usecase: HoursCommandUseCase = Depends(hours_command_usecase),
