@@ -112,6 +112,14 @@ class HoursCommandUseCaseImpl(HoursCommandUseCase):
                 hours.day = data.day
             if data.note:
                 hours.note = data.note
+            if data.user_id and data.task_id and data.day:
+                existing_hours = self.uow.hours_repository.find_existing_hours(
+                    data.day,
+                    data.user_id,
+                    data.task_id
+                )
+                if existing_hours is not None:
+                    raise HoursDayAlreadyExistsError
 
             self.uow.hours_repository.delete_by_id(id)
             self.uow.hours_repository.create(hours)

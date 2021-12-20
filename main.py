@@ -174,6 +174,9 @@ async def get_hours(
         status.HTTP_404_NOT_FOUND: {
             "model": ErrorMessageHoursNotFound,
         },
+        status.HTTP_409_CONFLICT: {
+            "model": ErrorMessageHoursDayAlreadyExists,
+        },
     },
     tags=["hours"],
 )
@@ -187,6 +190,11 @@ async def patch_hours(
     except HoursNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
+            detail=e.message,
+        )
+    except HoursDayAlreadyExistsError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
             detail=e.message,
         )
     except Exception as e:
