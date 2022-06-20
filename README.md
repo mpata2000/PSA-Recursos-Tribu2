@@ -10,6 +10,10 @@
 * [Docker](https://www.docker.com/)
 * [Heroku](https://www.heroku.com/)
 
+## Deployed DOCS
+
+https://psa-tribu2-recursos.herokuapp.com/docs
+
 ## Architecture
 
 Directory structure (based on [Onion Architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)):
